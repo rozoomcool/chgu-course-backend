@@ -14,7 +14,7 @@ import { TestService } from './test.service';
 import { Prisma } from '../../generated/prisma';
 import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
 
-@Controller('tests')
+@Controller({ path: 'tests', version: '1' })
 export class TestController {
     constructor(private readonly testService: TestService) { }
 

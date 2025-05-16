@@ -1,4 +1,3 @@
-// lesson-attachment.controller.ts
 import {
     Controller,
     Get,
@@ -10,19 +9,16 @@ import {
     ParseIntPipe,
     Query,
 } from '@nestjs/common';
-import { LessonAttachmentService } from './lessonAttachment.service';
-import { CreateLessonAttachmentDto, UpdateLessonAttachmentDto } from './dto/lessonAttachment.dto';
+import { TestStageService } from './testStage.service';
+import { CreateTestStageDto, UpdateTestStageDto } from './dto/test.dto';
 
-@Controller({
-    path: "lesson-attachments",
-    version: '1'
-})
-export class LessonAttachmentController {
-    constructor(private readonly lessonAttachmentService: LessonAttachmentService) { }
+@Controller({ path: 'test-stages', version: '1' })
+export class TestStageController {
+    constructor(private readonly testStageService: TestStageService) { }
 
     @Post()
-    create(@Body() createLessonAttachmentDto: CreateLessonAttachmentDto) {
-        return this.lessonAttachmentService.create(createLessonAttachmentDto);
+    create(@Body() createTestStageDto: CreateTestStageDto) {
+        return this.testStageService.create(createTestStageDto);
     }
 
     @Get()
@@ -34,7 +30,7 @@ export class LessonAttachmentController {
         @Query('orderBy') orderBy?: string,
         @Query('include') include?: string,
     ) {
-        return this.lessonAttachmentService.findMany({
+        return this.testStageService.findMany({
             skip: skip ? parseInt(skip) : undefined,
             take: take ? parseInt(take) : undefined,
             cursor: cursor ? JSON.parse(cursor) : undefined,
@@ -44,26 +40,26 @@ export class LessonAttachmentController {
         });
     }
 
-    @Get('lesson/:lessonId')
-    findByLessonId(@Param('lessonId', ParseIntPipe) lessonId: number) {
-        return this.lessonAttachmentService.findByLessonId(lessonId);
+    @Get('test/:testId')
+    findByTestId(@Param('testId', ParseIntPipe) testId: number) {
+        return this.testStageService.findByTestId(testId);
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.lessonAttachmentService.findOne(id);
+        return this.testStageService.findOne(id);
     }
 
     @Patch(':id')
     update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateLessonAttachmentDto: UpdateLessonAttachmentDto,
+        @Body() updateTestStageDto: UpdateTestStageDto,
     ) {
-        return this.lessonAttachmentService.update(id, updateLessonAttachmentDto);
+        return this.testStageService.update(id, updateTestStageDto);
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
-        return this.lessonAttachmentService.remove(id);
+        return this.testStageService.remove(id);
     }
 }

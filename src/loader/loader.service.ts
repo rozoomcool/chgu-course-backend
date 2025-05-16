@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Role } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
-import { TestLessonStage } from '../../generated/prisma/index';
 
 @Injectable()
 export class LoaderService implements OnModuleInit {
@@ -44,9 +43,6 @@ export class LoaderService implements OnModuleInit {
             })
             const lesson = await this.prismaService.lesson.create({
                 data: { title: "Hello World", chapterId: chapterOne.id }
-            })
-            const lectureLessonStage = await this.prismaService.lectureLessonStage.create({
-                data: { lecture: "klas; sdkfj fdgjh  kljkfdjgfd jfdj gkdfgfdhkjaj hxcj hlj fkjgfhgl sdghf", lessonId: lesson.id }
             })
         } catch (e) {
 

@@ -1,4 +1,3 @@
-// chapter.controller.ts
 import {
     Controller,
     Get,

@@ -16,8 +16,8 @@ import { MulterConfigService } from './config/multer.config';
 import { ServeStaticConfigService } from './config/serve-static.config';
 import { ChapterModule } from './chapter/chapter.module';
 import { LessonModule } from './lesson/lesson.module';
-import { LessonAttachmentModule } from './lesson-attachment/lesson-attachment.module';
 import { TestModule } from './test/test.module';
+import { LessonAttachmentModule } from './lessonAttachment/lessonAttachment.module';
 
 @Module({
   imports: [UserModule, PrismaModule, ConfigModule.forRoot({

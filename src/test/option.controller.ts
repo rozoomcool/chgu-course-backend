@@ -1,4 +1,3 @@
-// lesson-attachment.controller.ts
 import {
     Controller,
     Get,
@@ -10,19 +9,20 @@ import {
     ParseIntPipe,
     Query,
 } from '@nestjs/common';
-import { LessonAttachmentService } from './lessonAttachment.service';
-import { CreateLessonAttachmentDto, UpdateLessonAttachmentDto } from './dto/lessonAttachment.dto';
+import { OptionService } from './option.service';
+import { Prisma } from '../../generated/prisma';
+import { CreateOptionDto, UpdateOptionDto } from './dto/test.dto';
 
 @Controller({
-    path: "lesson-attachments",
+    path: 'options',
     version: '1'
 })
-export class LessonAttachmentController {
-    constructor(private readonly lessonAttachmentService: LessonAttachmentService) { }
+export class OptionController {
+    constructor(private readonly optionService: OptionService) { }
 
     @Post()
-    create(@Body() createLessonAttachmentDto: CreateLessonAttachmentDto) {
-        return this.lessonAttachmentService.create(createLessonAttachmentDto);
+    create(@Body() createOptionDto: CreateOptionDto) {
+        return this.optionService.create(createOptionDto);
     }
 
     @Get()
@@ -34,7 +34,7 @@ export class LessonAttachmentController {
         @Query('orderBy') orderBy?: string,
         @Query('include') include?: string,
     ) {
-        return this.lessonAttachmentService.findMany({
+        return this.optionService.findMany({
             skip: skip ? parseInt(skip) : undefined,
             take: take ? parseInt(take) : undefined,
             cursor: cursor ? JSON.parse(cursor) : undefined,
@@ -44,26 +44,26 @@ export class LessonAttachmentController {
         });
     }
 
-    @Get('lesson/:lessonId')
-    findByLessonId(@Param('lessonId', ParseIntPipe) lessonId: number) {
-        return this.lessonAttachmentService.findByLessonId(lessonId);
+    @Get('test-stage/:testStageId')
+    findByTestStageId(@Param('testStageId', ParseIntPipe) testStageId: number) {
+        return this.optionService.findByTestStageId(testStageId);
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.lessonAttachmentService.findOne(id);
+        return this.optionService.findOne(id);
     }
 
     @Patch(':id')
     update(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateLessonAttachmentDto: UpdateLessonAttachmentDto,
+        @Body() updateOptionDto: UpdateOptionDto,
     ) {
-        return this.lessonAttachmentService.update(id, updateLessonAttachmentDto);
+        return this.optionService.update(id, updateOptionDto);
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number) {
-        return this.lessonAttachmentService.remove(id);
+        return this.optionService.remove(id);
     }
 }
