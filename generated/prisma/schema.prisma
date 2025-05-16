@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     Role
+  profile  Profile?
+}
+
+model Profile {
+  id        Int       @id @default(autoincrement())
+  fullname  String?
+  birthday  DateTime?
+  avatarUrl String?
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Course {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  chapters    Chapter[]
+}
+
+model Chapter {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  courseId    Int
+  course      Course   @relation(fields: [courseId], references: [id])
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id          Int                @id @default(autoincrement())
+  title       String
+  lecture     String?
+  test        Test?
+  attachments LessonAttachment[]
+  chapterId   Int
+  chapter     Chapter            @relation(fields: [chapterId], references: [id])
+}
+
+model LessonAttachment {
+  id             Int                  @id @default(autoincrement())
+  url            String
+  attachmentType LessonAttachmentType
+  lesson         Lesson               @relation(fields: [lessonId], references: [id])
+  lessonId       Int                  @unique
+}
+
+enum LessonAttachmentType {
+  VIDEO
+  IMAGE
+  ARCHIVE
+  LINK
+}
+
+model Test {
+  id         Int         @id @default(autoincrement())
+  lesson     Lesson?     @relation(fields: [lessonId], references: [id])
+  lessonId   Int?        @unique
+  testStages TestStage[]
+}
+
+model TestStage {
+  id       Int           @id @default(autoincrement())
+  test     Test          @relation(fields: [testId], references: [id])
+  testId   Int
+  type     TestStageType @default(OPTIONAL)
+  answerId Int           @unique
+  options  Option[]
+  question String
+  answer   Option        @relation("TestStageAnswerOption", fields: [answerId], references: [id])
+}
+
+model Option {
+  id          Int        @id @default(autoincrement())
+  option      String
+  testStageId Int
+  testStage   TestStage  @relation(fields: [testStageId], references: [id])
+  answerFor   TestStage? @relation("TestStageAnswerOption")
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  TEACHER
+  STUDENT
+}
+
+enum TestStageType {
+  MANUAL
+  OPTIONAL
+}
