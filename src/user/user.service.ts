@@ -37,9 +37,9 @@ export class UserService {
         const saltOrRounds = 10;
         const hash = await bcrypt.hash(data.password, saltOrRounds);
         const user = await this.prisma.user.create({
-            data: { email: data.email, password: hash, role:  data.role }
+            data: { email: data.email, password: hash, role: data.role }
         });
-        const profile = await this.prisma.profile.create({data: {userId: user.id}});
+        const profile = await this.prisma.profile.create({ data: { userId: user.id } });
         return user
     }
 
