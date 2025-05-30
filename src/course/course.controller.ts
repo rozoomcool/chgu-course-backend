@@ -1,10 +1,14 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { Prisma } from 'generated/prisma';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Prisma, Role } from 'generated/prisma';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
+import { ImageFileUploadInterceptor } from 'src/config/imageFileUpload.interceptor';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
+// @UseInterceptors(new LoggingInterceptor())
 @Controller({ path: 'course', version: '1' })
 export class CourseController {
     constructor(
@@ -12,21 +16,16 @@ export class CourseController {
     ) { }
 
     @Post()
-    @UseInterceptors(FileInterceptor('file'))
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    @UseInterceptors(ImageFileUploadInterceptor)
     async create(@UploadedFile(new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-            fileType: /image\/(jpeg|png|webp|jpg)/,
-            skipMagicNumbersValidation: true
-        })
-        .addMaxSizeValidator({
-            maxSize: Math.pow(1024, 2) * 2
-        })
         .build({
             errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-        })) file: Express.Multer.File, @Body() data: CreateCourseDto) {
-        data.imageUrl = file.originalname;
+        })) file: Express.Multer.File, @Body() data: CreateCourseDto, @Request() req) {
+        data.imageUrl = file.filename;
         try {
-            return await this.courseService.create(data);
+            return await this.courseService.create(data, req.user.id);
         } catch (e) {
             throw new HttpException("bad credentials", HttpStatus.BAD_REQUEST);
         }
@@ -49,32 +48,25 @@ export class CourseController {
         });
     }
 
+    @Get()
+    findByTeacherId(
+        @Query('teacherId') teacherId?: number,
+    ) {
+        return this.courseService.findMany({
+            where: { teacherId },
+        });
+    }
+
     @Get("all")
     findAllDeep(
         @Query('skip') skip?: string,
-        @Query('take') take?: string,
-        @Query('cursor') cursor?: Prisma.CourseWhereUniqueInput,
-        @Query('where') where?: Prisma.CourseWhereInput,
-        @Query('orderBy') orderBy?: Prisma.CourseOrderByWithRelationInput,
+        @Query('take') take?: string
     ) {
         return this.courseService.findManyDeep({
             skip: skip ? parseInt(skip) : 0,
             take: take ? parseInt(take) : 10,
-            cursor,
-            where,
-            orderBy,
         });
     }
-
-    //     @Post()
-    //   create(@Body() createCourseDto: CreateCourseDto) {
-    //     return this.courseService.create(createCourseDto);
-    //   }
-
-    //   @Get()
-    //   findAll() {
-    //     return this.courseService.findAll();
-    //   }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {

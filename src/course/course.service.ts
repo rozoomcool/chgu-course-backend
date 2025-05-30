@@ -44,12 +44,7 @@ export class CourseService {
             include: {
                 chapters: {
                     select: {
-                        lessons: {
-                            select: {
-                                // lectureStages: true,
-                                // testStages: true
-                            }
-                        }
+                        lessons: true
                     }
                 },
 
@@ -57,9 +52,16 @@ export class CourseService {
         });
     }
 
-    async create(createCourseDto: CreateCourseDto) {
+    async create(createCourseDto: CreateCourseDto, teacherId: number) {
         return this.prisma.course.create({
-            data: createCourseDto,
+            data: {
+                ...createCourseDto,
+                teacher: {
+                    connect: {
+                        id: teacherId
+                    }
+                }
+            },
         });
     }
 

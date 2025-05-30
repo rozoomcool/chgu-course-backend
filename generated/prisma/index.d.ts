@@ -1638,15 +1638,57 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    courses: number
+    studentCourses: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    courses?: boolean | UserCountOutputTypeCountCoursesArgs
+    studentCourses?: boolean | UserCountOutputTypeCountStudentCoursesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountStudentCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseWhereInput
+  }
+
+
+  /**
    * Count Type CourseCountOutputType
    */
 
   export type CourseCountOutputType = {
     chapters: number
+    students: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chapters?: boolean | CourseCountOutputTypeCountChaptersArgs
+    students?: boolean | CourseCountOutputTypeCountStudentsArgs
   }
 
   // Custom InputTypes
@@ -1665,6 +1707,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountChaptersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChapterWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
 
@@ -1987,6 +2036,9 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     profile?: boolean | User$profileArgs<ExtArgs>
+    courses?: boolean | User$coursesArgs<ExtArgs>
+    studentCourses?: boolean | User$studentCoursesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2013,6 +2065,9 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "role", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     profile?: boolean | User$profileArgs<ExtArgs>
+    courses?: boolean | User$coursesArgs<ExtArgs>
+    studentCourses?: boolean | User$studentCoursesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
   export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2021,6 +2076,8 @@ export namespace Prisma {
     name: "User"
     objects: {
       profile: Prisma.$ProfilePayload<ExtArgs> | null
+      courses: Prisma.$CoursePayload<ExtArgs>[]
+      studentCourses: Prisma.$CoursePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2422,6 +2479,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    courses<T extends User$coursesArgs<ExtArgs> = {}>(args?: Subset<T, User$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    studentCourses<T extends User$studentCoursesArgs<ExtArgs> = {}>(args?: Subset<T, User$studentCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2859,6 +2918,54 @@ export namespace Prisma {
      */
     include?: ProfileInclude<ExtArgs> | null
     where?: ProfileWhereInput
+  }
+
+  /**
+   * User.courses
+   */
+  export type User$coursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Course
+     */
+    select?: CourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Course
+     */
+    omit?: CourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseInclude<ExtArgs> | null
+    where?: CourseWhereInput
+    orderBy?: CourseOrderByWithRelationInput | CourseOrderByWithRelationInput[]
+    cursor?: CourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseScalarFieldEnum | CourseScalarFieldEnum[]
+  }
+
+  /**
+   * User.studentCourses
+   */
+  export type User$studentCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Course
+     */
+    select?: CourseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Course
+     */
+    omit?: CourseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseInclude<ExtArgs> | null
+    where?: CourseWhereInput
+    orderBy?: CourseOrderByWithRelationInput | CourseOrderByWithRelationInput[]
+    cursor?: CourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseScalarFieldEnum | CourseScalarFieldEnum[]
   }
 
   /**
@@ -3990,10 +4097,12 @@ export namespace Prisma {
 
   export type CourseAvgAggregateOutputType = {
     id: number | null
+    teacherId: number | null
   }
 
   export type CourseSumAggregateOutputType = {
     id: number | null
+    teacherId: number | null
   }
 
   export type CourseMinAggregateOutputType = {
@@ -4001,6 +4110,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
+    teacherId: number | null
   }
 
   export type CourseMaxAggregateOutputType = {
@@ -4008,6 +4118,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
+    teacherId: number | null
   }
 
   export type CourseCountAggregateOutputType = {
@@ -4015,16 +4126,19 @@ export namespace Prisma {
     title: number
     description: number
     imageUrl: number
+    teacherId: number
     _all: number
   }
 
 
   export type CourseAvgAggregateInputType = {
     id?: true
+    teacherId?: true
   }
 
   export type CourseSumAggregateInputType = {
     id?: true
+    teacherId?: true
   }
 
   export type CourseMinAggregateInputType = {
@@ -4032,6 +4146,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    teacherId?: true
   }
 
   export type CourseMaxAggregateInputType = {
@@ -4039,6 +4154,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    teacherId?: true
   }
 
   export type CourseCountAggregateInputType = {
@@ -4046,6 +4162,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    teacherId?: true
     _all?: true
   }
 
@@ -4140,6 +4257,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl: string | null
+    teacherId: number
     _count: CourseCountAggregateOutputType | null
     _avg: CourseAvgAggregateOutputType | null
     _sum: CourseSumAggregateOutputType | null
@@ -4166,7 +4284,10 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    teacherId?: boolean
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
+    students?: boolean | Course$studentsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -4175,6 +4296,8 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    teacherId?: boolean
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
   export type CourseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4182,6 +4305,8 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    teacherId?: boolean
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
   export type CourseSelectScalar = {
@@ -4189,26 +4314,36 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    teacherId?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "imageUrl", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "imageUrl" | "teacherId", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
+    students?: boolean | Course$studentsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type CourseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CourseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teacher?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $CoursePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Course"
     objects: {
       chapters: Prisma.$ChapterPayload<ExtArgs>[]
+      teacher: Prisma.$UserPayload<ExtArgs>
+      students: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       title: string
       description: string
       imageUrl: string | null
+      teacherId: number
     }, ExtArgs["result"]["course"]>
     composites: {}
   }
@@ -4604,6 +4739,8 @@ export namespace Prisma {
   export interface Prisma__CourseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     chapters<T extends Course$chaptersArgs<ExtArgs> = {}>(args?: Subset<T, Course$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    teacher<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    students<T extends Course$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Course$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4637,6 +4774,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
     readonly imageUrl: FieldRef<"Course", 'String'>
+    readonly teacherId: FieldRef<"Course", 'Int'>
   }
     
 
@@ -4886,6 +5024,10 @@ export namespace Prisma {
      */
     data: CourseCreateManyInput | CourseCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4956,6 +5098,10 @@ export namespace Prisma {
      * Limit how many Courses to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5046,6 +5192,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
+  }
+
+  /**
+   * Course.students
+   */
+  export type Course$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -11775,7 +11945,8 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     description: 'description',
-    imageUrl: 'imageUrl'
+    imageUrl: 'imageUrl',
+    teacherId: 'teacherId'
   };
 
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -11978,6 +12149,8 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
     profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
+    courses?: CourseListRelationFilter
+    studentCourses?: CourseListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11986,6 +12159,8 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     profile?: ProfileOrderByWithRelationInput
+    courses?: CourseOrderByRelationAggregateInput
+    studentCourses?: CourseOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11997,6 +12172,8 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
     profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
+    courses?: CourseListRelationFilter
+    studentCourses?: CourseListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -12086,7 +12263,10 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringFilter<"Course"> | string
     imageUrl?: StringNullableFilter<"Course"> | string | null
+    teacherId?: IntFilter<"Course"> | number
     chapters?: ChapterListRelationFilter
+    teacher?: XOR<UserScalarRelationFilter, UserWhereInput>
+    students?: UserListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -12094,7 +12274,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    teacherId?: SortOrder
     chapters?: ChapterOrderByRelationAggregateInput
+    teacher?: UserOrderByWithRelationInput
+    students?: UserOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -12105,7 +12288,10 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringFilter<"Course"> | string
     imageUrl?: StringNullableFilter<"Course"> | string | null
+    teacherId?: IntFilter<"Course"> | number
     chapters?: ChapterListRelationFilter
+    teacher?: XOR<UserScalarRelationFilter, UserWhereInput>
+    students?: UserListRelationFilter
   }, "id">
 
   export type CourseOrderByWithAggregationInput = {
@@ -12113,6 +12299,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    teacherId?: SortOrder
     _count?: CourseCountOrderByAggregateInput
     _avg?: CourseAvgOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
@@ -12128,6 +12315,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Course"> | string
     description?: StringWithAggregatesFilter<"Course"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    teacherId?: IntWithAggregatesFilter<"Course"> | number
   }
 
   export type ChapterWhereInput = {
@@ -12458,6 +12646,8 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     profile?: ProfileCreateNestedOneWithoutUserInput
+    courses?: CourseCreateNestedManyWithoutTeacherInput
+    studentCourses?: CourseCreateNestedManyWithoutStudentsInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12466,6 +12656,8 @@ export namespace Prisma {
     password: string
     role: $Enums.Role
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    courses?: CourseUncheckedCreateNestedManyWithoutTeacherInput
+    studentCourses?: CourseUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type UserUpdateInput = {
@@ -12473,6 +12665,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profile?: ProfileUpdateOneWithoutUserNestedInput
+    courses?: CourseUpdateManyWithoutTeacherNestedInput
+    studentCourses?: CourseUpdateManyWithoutStudentsNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12481,6 +12675,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutTeacherNestedInput
+    studentCourses?: CourseUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12560,6 +12756,8 @@ export namespace Prisma {
     description: string
     imageUrl?: string | null
     chapters?: ChapterCreateNestedManyWithoutCourseInput
+    teacher: UserCreateNestedOneWithoutCoursesInput
+    students?: UserCreateNestedManyWithoutStudentCoursesInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -12567,7 +12765,9 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    teacherId: number
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
+    students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
   }
 
   export type CourseUpdateInput = {
@@ -12575,6 +12775,8 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
+    teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
+    students?: UserUpdateManyWithoutStudentCoursesNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -12582,7 +12784,9 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: IntFieldUpdateOperationsInput | number
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
+    students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -12590,6 +12794,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    teacherId: number
   }
 
   export type CourseUpdateManyMutationInput = {
@@ -12603,6 +12808,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ChapterCreateInput = {
@@ -12923,6 +13129,16 @@ export namespace Prisma {
     isNot?: ProfileWhereInput | null
   }
 
+  export type CourseListRelationFilter = {
+    every?: CourseWhereInput
+    some?: CourseWhereInput
+    none?: CourseWhereInput
+  }
+
+  export type CourseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -13104,7 +13320,17 @@ export namespace Prisma {
     none?: ChapterWhereInput
   }
 
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
   export type ChapterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13113,10 +13339,12 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type CourseAvgOrderByAggregateInput = {
     id?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
@@ -13124,6 +13352,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type CourseMinOrderByAggregateInput = {
@@ -13131,10 +13360,12 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type CourseSumOrderByAggregateInput = {
     id?: SortOrder
+    teacherId?: SortOrder
   }
 
   export type CourseScalarRelationFilter = {
@@ -13471,10 +13702,36 @@ export namespace Prisma {
     connect?: ProfileWhereUniqueInput
   }
 
+  export type CourseCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput> | CourseCreateWithoutTeacherInput[] | CourseUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutTeacherInput | CourseCreateOrConnectWithoutTeacherInput[]
+    createMany?: CourseCreateManyTeacherInputEnvelope
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+  }
+
+  export type CourseCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput> | CourseCreateWithoutStudentsInput[] | CourseUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutStudentsInput | CourseCreateOrConnectWithoutStudentsInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+  }
+
   export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
     connect?: ProfileWhereUniqueInput
+  }
+
+  export type CourseUncheckedCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput> | CourseCreateWithoutTeacherInput[] | CourseUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutTeacherInput | CourseCreateOrConnectWithoutTeacherInput[]
+    createMany?: CourseCreateManyTeacherInputEnvelope
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+  }
+
+  export type CourseUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput> | CourseCreateWithoutStudentsInput[] | CourseUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutStudentsInput | CourseCreateOrConnectWithoutStudentsInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13495,6 +13752,33 @@ export namespace Prisma {
     update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
   }
 
+  export type CourseUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput> | CourseCreateWithoutTeacherInput[] | CourseUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutTeacherInput | CourseCreateOrConnectWithoutTeacherInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutTeacherInput | CourseUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: CourseCreateManyTeacherInputEnvelope
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutTeacherInput | CourseUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutTeacherInput | CourseUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
+  }
+
+  export type CourseUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput> | CourseCreateWithoutStudentsInput[] | CourseUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutStudentsInput | CourseCreateOrConnectWithoutStudentsInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutStudentsInput | CourseUpsertWithWhereUniqueWithoutStudentsInput[]
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutStudentsInput | CourseUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutStudentsInput | CourseUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -13511,6 +13795,33 @@ export namespace Prisma {
     delete?: ProfileWhereInput | boolean
     connect?: ProfileWhereUniqueInput
     update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CourseUncheckedUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput> | CourseCreateWithoutTeacherInput[] | CourseUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutTeacherInput | CourseCreateOrConnectWithoutTeacherInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutTeacherInput | CourseUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: CourseCreateManyTeacherInputEnvelope
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutTeacherInput | CourseUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutTeacherInput | CourseUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
+  }
+
+  export type CourseUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput> | CourseCreateWithoutStudentsInput[] | CourseUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutStudentsInput | CourseCreateOrConnectWithoutStudentsInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutStudentsInput | CourseUpsertWithWhereUniqueWithoutStudentsInput[]
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutStudentsInput | CourseUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutStudentsInput | CourseUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutProfileInput = {
@@ -13542,11 +13853,29 @@ export namespace Prisma {
     connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
   }
 
+  export type UserCreateNestedOneWithoutCoursesInput = {
+    create?: XOR<UserCreateWithoutCoursesInput, UserUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCoursesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedManyWithoutStudentCoursesInput = {
+    create?: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput> | UserCreateWithoutStudentCoursesInput[] | UserUncheckedCreateWithoutStudentCoursesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentCoursesInput | UserCreateOrConnectWithoutStudentCoursesInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
   export type ChapterUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<ChapterCreateWithoutCourseInput, ChapterUncheckedCreateWithoutCourseInput> | ChapterCreateWithoutCourseInput[] | ChapterUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: ChapterCreateOrConnectWithoutCourseInput | ChapterCreateOrConnectWithoutCourseInput[]
     createMany?: ChapterCreateManyCourseInputEnvelope
     connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutStudentCoursesInput = {
+    create?: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput> | UserCreateWithoutStudentCoursesInput[] | UserUncheckedCreateWithoutStudentCoursesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentCoursesInput | UserCreateOrConnectWithoutStudentCoursesInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type ChapterUpdateManyWithoutCourseNestedInput = {
@@ -13563,6 +13892,27 @@ export namespace Prisma {
     deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
   }
 
+  export type UserUpdateOneRequiredWithoutCoursesNestedInput = {
+    create?: XOR<UserCreateWithoutCoursesInput, UserUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCoursesInput
+    upsert?: UserUpsertWithoutCoursesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCoursesInput, UserUpdateWithoutCoursesInput>, UserUncheckedUpdateWithoutCoursesInput>
+  }
+
+  export type UserUpdateManyWithoutStudentCoursesNestedInput = {
+    create?: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput> | UserCreateWithoutStudentCoursesInput[] | UserUncheckedCreateWithoutStudentCoursesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentCoursesInput | UserCreateOrConnectWithoutStudentCoursesInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutStudentCoursesInput | UserUpsertWithWhereUniqueWithoutStudentCoursesInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutStudentCoursesInput | UserUpdateWithWhereUniqueWithoutStudentCoursesInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutStudentCoursesInput | UserUpdateManyWithWhereWithoutStudentCoursesInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
   export type ChapterUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<ChapterCreateWithoutCourseInput, ChapterUncheckedCreateWithoutCourseInput> | ChapterCreateWithoutCourseInput[] | ChapterUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: ChapterCreateOrConnectWithoutCourseInput | ChapterCreateOrConnectWithoutCourseInput[]
@@ -13575,6 +13925,19 @@ export namespace Prisma {
     update?: ChapterUpdateWithWhereUniqueWithoutCourseInput | ChapterUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: ChapterUpdateManyWithWhereWithoutCourseInput | ChapterUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutStudentCoursesNestedInput = {
+    create?: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput> | UserCreateWithoutStudentCoursesInput[] | UserUncheckedCreateWithoutStudentCoursesInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutStudentCoursesInput | UserCreateOrConnectWithoutStudentCoursesInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutStudentCoursesInput | UserUpsertWithWhereUniqueWithoutStudentCoursesInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutStudentCoursesInput | UserUpdateWithWhereUniqueWithoutStudentCoursesInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutStudentCoursesInput | UserUpdateManyWithWhereWithoutStudentCoursesInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutChaptersInput = {
@@ -14157,6 +14520,55 @@ export namespace Prisma {
     create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
   }
 
+  export type CourseCreateWithoutTeacherInput = {
+    title: string
+    description: string
+    imageUrl?: string | null
+    chapters?: ChapterCreateNestedManyWithoutCourseInput
+    students?: UserCreateNestedManyWithoutStudentCoursesInput
+  }
+
+  export type CourseUncheckedCreateWithoutTeacherInput = {
+    id?: number
+    title: string
+    description: string
+    imageUrl?: string | null
+    chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
+    students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
+  }
+
+  export type CourseCreateOrConnectWithoutTeacherInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type CourseCreateManyTeacherInputEnvelope = {
+    data: CourseCreateManyTeacherInput | CourseCreateManyTeacherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseCreateWithoutStudentsInput = {
+    title: string
+    description: string
+    imageUrl?: string | null
+    chapters?: ChapterCreateNestedManyWithoutCourseInput
+    teacher: UserCreateNestedOneWithoutCoursesInput
+  }
+
+  export type CourseUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    title: string
+    description: string
+    imageUrl?: string | null
+    teacherId: number
+    chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutStudentsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput>
+  }
+
   export type ProfileUpsertWithoutUserInput = {
     update: XOR<ProfileUpdateWithoutUserInput, ProfileUncheckedUpdateWithoutUserInput>
     create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
@@ -14181,10 +14593,55 @@ export namespace Prisma {
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type CourseUpsertWithWhereUniqueWithoutTeacherInput = {
+    where: CourseWhereUniqueInput
+    update: XOR<CourseUpdateWithoutTeacherInput, CourseUncheckedUpdateWithoutTeacherInput>
+    create: XOR<CourseCreateWithoutTeacherInput, CourseUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type CourseUpdateWithWhereUniqueWithoutTeacherInput = {
+    where: CourseWhereUniqueInput
+    data: XOR<CourseUpdateWithoutTeacherInput, CourseUncheckedUpdateWithoutTeacherInput>
+  }
+
+  export type CourseUpdateManyWithWhereWithoutTeacherInput = {
+    where: CourseScalarWhereInput
+    data: XOR<CourseUpdateManyMutationInput, CourseUncheckedUpdateManyWithoutTeacherInput>
+  }
+
+  export type CourseScalarWhereInput = {
+    AND?: CourseScalarWhereInput | CourseScalarWhereInput[]
+    OR?: CourseScalarWhereInput[]
+    NOT?: CourseScalarWhereInput | CourseScalarWhereInput[]
+    id?: IntFilter<"Course"> | number
+    title?: StringFilter<"Course"> | string
+    description?: StringFilter<"Course"> | string
+    imageUrl?: StringNullableFilter<"Course"> | string | null
+    teacherId?: IntFilter<"Course"> | number
+  }
+
+  export type CourseUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: CourseWhereUniqueInput
+    update: XOR<CourseUpdateWithoutStudentsInput, CourseUncheckedUpdateWithoutStudentsInput>
+    create: XOR<CourseCreateWithoutStudentsInput, CourseUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type CourseUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: CourseWhereUniqueInput
+    data: XOR<CourseUpdateWithoutStudentsInput, CourseUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type CourseUpdateManyWithWhereWithoutStudentsInput = {
+    where: CourseScalarWhereInput
+    data: XOR<CourseUpdateManyMutationInput, CourseUncheckedUpdateManyWithoutStudentsInput>
+  }
+
   export type UserCreateWithoutProfileInput = {
     email: string
     password: string
     role: $Enums.Role
+    courses?: CourseCreateNestedManyWithoutTeacherInput
+    studentCourses?: CourseCreateNestedManyWithoutStudentsInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -14192,6 +14649,8 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.Role
+    courses?: CourseUncheckedCreateNestedManyWithoutTeacherInput
+    studentCourses?: CourseUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -14214,6 +14673,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    courses?: CourseUpdateManyWithoutTeacherNestedInput
+    studentCourses?: CourseUpdateManyWithoutStudentsNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -14221,6 +14682,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    courses?: CourseUncheckedUpdateManyWithoutTeacherNestedInput
+    studentCourses?: CourseUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type ChapterCreateWithoutCourseInput = {
@@ -14244,6 +14707,50 @@ export namespace Prisma {
   export type ChapterCreateManyCourseInputEnvelope = {
     data: ChapterCreateManyCourseInput | ChapterCreateManyCourseInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutCoursesInput = {
+    email: string
+    password: string
+    role: $Enums.Role
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    studentCourses?: CourseCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserUncheckedCreateWithoutCoursesInput = {
+    id?: number
+    email: string
+    password: string
+    role: $Enums.Role
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    studentCourses?: CourseUncheckedCreateNestedManyWithoutStudentsInput
+  }
+
+  export type UserCreateOrConnectWithoutCoursesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCoursesInput, UserUncheckedCreateWithoutCoursesInput>
+  }
+
+  export type UserCreateWithoutStudentCoursesInput = {
+    email: string
+    password: string
+    role: $Enums.Role
+    profile?: ProfileCreateNestedOneWithoutUserInput
+    courses?: CourseCreateNestedManyWithoutTeacherInput
+  }
+
+  export type UserUncheckedCreateWithoutStudentCoursesInput = {
+    id?: number
+    email: string
+    password: string
+    role: $Enums.Role
+    profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
+    courses?: CourseUncheckedCreateNestedManyWithoutTeacherInput
+  }
+
+  export type UserCreateOrConnectWithoutStudentCoursesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput>
   }
 
   export type ChapterUpsertWithWhereUniqueWithoutCourseInput = {
@@ -14272,10 +14779,66 @@ export namespace Prisma {
     courseId?: IntFilter<"Chapter"> | number
   }
 
+  export type UserUpsertWithoutCoursesInput = {
+    update: XOR<UserUpdateWithoutCoursesInput, UserUncheckedUpdateWithoutCoursesInput>
+    create: XOR<UserCreateWithoutCoursesInput, UserUncheckedCreateWithoutCoursesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCoursesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCoursesInput, UserUncheckedUpdateWithoutCoursesInput>
+  }
+
+  export type UserUpdateWithoutCoursesInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    studentCourses?: CourseUpdateManyWithoutStudentsNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCoursesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    studentCourses?: CourseUncheckedUpdateManyWithoutStudentsNestedInput
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutStudentCoursesInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutStudentCoursesInput, UserUncheckedUpdateWithoutStudentCoursesInput>
+    create: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutStudentCoursesInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutStudentCoursesInput, UserUncheckedUpdateWithoutStudentCoursesInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutStudentCoursesInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutStudentCoursesInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+  }
+
   export type CourseCreateWithoutChaptersInput = {
     title: string
     description: string
     imageUrl?: string | null
+    teacher: UserCreateNestedOneWithoutCoursesInput
+    students?: UserCreateNestedManyWithoutStudentCoursesInput
   }
 
   export type CourseUncheckedCreateWithoutChaptersInput = {
@@ -14283,6 +14846,8 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    teacherId: number
+    students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
   }
 
   export type CourseCreateOrConnectWithoutChaptersInput = {
@@ -14330,6 +14895,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
+    students?: UserUpdateManyWithoutStudentCoursesNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutChaptersInput = {
@@ -14337,6 +14904,8 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: IntFieldUpdateOperationsInput | number
+    students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutChapterInput = {
@@ -14842,6 +15411,62 @@ export namespace Prisma {
     options?: OptionUncheckedUpdateManyWithoutTestStageNestedInput
   }
 
+  export type CourseCreateManyTeacherInput = {
+    id?: number
+    title: string
+    description: string
+    imageUrl?: string | null
+  }
+
+  export type CourseUpdateWithoutTeacherInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    chapters?: ChapterUpdateManyWithoutCourseNestedInput
+    students?: UserUpdateManyWithoutStudentCoursesNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutTeacherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
+    students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
+  }
+
+  export type CourseUncheckedUpdateManyWithoutTeacherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CourseUpdateWithoutStudentsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    chapters?: ChapterUpdateManyWithoutCourseNestedInput
+    teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: IntFieldUpdateOperationsInput | number
+    chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateManyWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    teacherId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type ChapterCreateManyCourseInput = {
     id?: number
     title: string
@@ -14865,6 +15490,30 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserUpdateWithoutStudentCoursesInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profile?: ProfileUpdateOneWithoutUserNestedInput
+    courses?: CourseUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutStudentCoursesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutStudentCoursesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type LessonCreateManyChapterInput = {

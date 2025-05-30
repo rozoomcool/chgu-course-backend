@@ -9,11 +9,13 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  role     Role
-  profile  Profile?
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  password       String
+  role           Role
+  profile        Profile?
+  courses        Course[]
+  studentCourses Course[] @relation("CourseStudents")
 }
 
 model Profile {
@@ -31,6 +33,9 @@ model Course {
   description String
   imageUrl    String?
   chapters    Chapter[]
+  teacher     User      @relation(fields: [teacherId], references: [id])
+  teacherId   Int
+  students    User[]    @relation("CourseStudents")
 }
 
 model Chapter {

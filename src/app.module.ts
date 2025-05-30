@@ -18,6 +18,7 @@ import { ChapterModule } from './chapter/chapter.module';
 import { LessonModule } from './lesson/lesson.module';
 import { TestModule } from './test/test.module';
 import { LessonAttachmentModule } from './lessonAttachment/lessonAttachment.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [UserModule, PrismaModule, ConfigModule.forRoot({
@@ -34,7 +35,7 @@ import { LessonAttachmentModule } from './lessonAttachment/lessonAttachment.modu
       useClass: MulterConfigService,
       inject: [ConfigService],
     }),
-    AuthModule, LoaderModule, CourseModule, ChapterModule, LessonModule, LessonAttachmentModule, TestModule],
+    AuthModule, LoaderModule, CourseModule, ChapterModule, LessonModule, LessonAttachmentModule, TestModule, ProfileModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -21,31 +21,31 @@ export class LoaderService implements OnModuleInit {
     }
 
     async addCourse() {
-        try {
+        // try {
 
-            const course = await this.prismaService.course.create({
-                data: { title: "Javasctipt Beginner", description: "Hello World" }
-            })
-            const chapterOne = await this.prismaService.chapter.create({
-                data: { title: "What is programming", courseId: course.id }
-            })
-            const chapterTwo = await this.prismaService.chapter.create({
-                data: { title: "Html for beginners", courseId: course.id }
-            })
-            const chapterThree = await this.prismaService.chapter.create({
-                data: { title: "Css styling", courseId: course.id }
-            })
-            const chapterFour = await this.prismaService.chapter.create({
-                data: { title: "Making our first web page", courseId: course.id }
-            })
-            const chapterFive = await this.prismaService.chapter.create({
-                data: { title: "Add dynamic with javascript", courseId: course.id }
-            })
-            const lesson = await this.prismaService.lesson.create({
-                data: { title: "Hello World", chapterId: chapterOne.id }
-            })
-        } catch (e) {
+        //     const course = await this.prismaService.course.create({
+        //         data: { title: "Javasctipt Beginner", description: "Hello World" }
+        //     })
+        //     const chapterOne = await this.prismaService.chapter.create({
+        //         data: { title: "What is programming", courseId: course.id }
+        //     })
+        //     const chapterTwo = await this.prismaService.chapter.create({
+        //         data: { title: "Html for beginners", courseId: course.id }
+        //     })
+        //     const chapterThree = await this.prismaService.chapter.create({
+        //         data: { title: "Css styling", courseId: course.id }
+        //     })
+        //     const chapterFour = await this.prismaService.chapter.create({
+        //         data: { title: "Making our first web page", courseId: course.id }
+        //     })
+        //     const chapterFive = await this.prismaService.chapter.create({
+        //         data: { title: "Add dynamic with javascript", courseId: course.id }
+        //     })
+        //     const lesson = await this.prismaService.lesson.create({
+        //         data: { title: "Hello World", chapterId: chapterOne.id }
+        //     })
+        // } catch (e) {
 
-        }
+        // }
     }
 }
