@@ -143,18 +143,11 @@ exports.Prisma.CourseScalarFieldEnum = {
   teacherId: 'teacherId'
 };
 
-exports.Prisma.ChapterScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  courseId: 'courseId'
-};
-
 exports.Prisma.LessonScalarFieldEnum = {
   id: 'id',
   title: 'title',
   lecture: 'lecture',
-  chapterId: 'chapterId'
+  courseId: 'courseId'
 };
 
 exports.Prisma.LessonAttachmentScalarFieldEnum = {
@@ -220,7 +213,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Profile: 'Profile',
   Course: 'Course',
-  Chapter: 'Chapter',
   Lesson: 'Lesson',
   LessonAttachment: 'LessonAttachment',
   Test: 'Test',

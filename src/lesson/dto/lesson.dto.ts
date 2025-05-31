@@ -11,7 +11,7 @@ export class CreateLessonDto {
 
   @IsNotEmpty()
   @IsNumber()
-  chapterId: number;
+  courseId: number;
 }
 
 export class UpdateLessonDto {

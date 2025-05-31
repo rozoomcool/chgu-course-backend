@@ -14,7 +14,6 @@ import { diskStorage } from 'multer';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MulterConfigService } from './config/multer.config';
 import { ServeStaticConfigService } from './config/serve-static.config';
-import { ChapterModule } from './chapter/chapter.module';
 import { LessonModule } from './lesson/lesson.module';
 import { TestModule } from './test/test.module';
 import { LessonAttachmentModule } from './lessonAttachment/lessonAttachment.module';
@@ -35,7 +34,7 @@ import { ProfileModule } from './profile/profile.module';
       useClass: MulterConfigService,
       inject: [ConfigService],
     }),
-    AuthModule, LoaderModule, CourseModule, ChapterModule, LessonModule, LessonAttachmentModule, TestModule, ProfileModule],
+    AuthModule, LoaderModule, CourseModule, LessonModule, LessonAttachmentModule, TestModule, ProfileModule],
   controllers: [AppController],
   providers: [AppService],
 })

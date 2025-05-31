@@ -42,11 +42,7 @@ export class CourseService {
             where,
             orderBy,
             include: {
-                chapters: {
-                    select: {
-                        lessons: true
-                    }
-                },
+                lessons: true
 
             }
         });
@@ -68,11 +64,7 @@ export class CourseService {
     async findAll() {
         return this.prisma.course.findMany({
             include: {
-                chapters: {
-                    include: {
-                        lessons: true,
-                    },
-                },
+                lessons: true,
             },
         });
     }
@@ -81,11 +73,7 @@ export class CourseService {
         const course = await this.prisma.course.findUnique({
             where: { id },
             include: {
-                chapters: {
-                    include: {
-                        lessons: true,
-                    },
-                },
+                lessons: true,
             },
         });
 

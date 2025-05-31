@@ -45,8 +45,8 @@ export class LessonController {
   }
 
   @Get('chapter/:chapterId')
-  findAllByChapterId(@Param('chapterId', ParseIntPipe) chapterId: number) {
-    return this.lessonService.findAllByChapterId(chapterId);
+  findAllByChapterId(@Param('courseId', ParseIntPipe) chapterId: number) {
+    return this.lessonService.findAllByCourseId(chapterId);
   }
 
   @Get(':id')

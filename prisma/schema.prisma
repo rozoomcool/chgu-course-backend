@@ -28,23 +28,14 @@ model Profile {
 }
 
 model Course {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   imageUrl    String?
-  chapters    Chapter[]
-  teacher     User      @relation(fields: [teacherId], references: [id])
-  teacherId   Int
-  students    User[]    @relation("CourseStudents")
-}
-
-model Chapter {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  courseId    Int
-  course      Course   @relation(fields: [courseId], references: [id])
   lessons     Lesson[]
+  teacher     User     @relation(fields: [teacherId], references: [id])
+  teacherId   Int
+  students    User[]   @relation("CourseStudents")
 }
 
 model Lesson {
@@ -53,8 +44,8 @@ model Lesson {
   lecture     String?
   test        Test?
   attachments LessonAttachment[]
-  chapterId   Int
-  chapter     Chapter            @relation(fields: [chapterId], references: [id])
+  courseId    Int
+  course      Course             @relation(fields: [courseId], references: [id])
 }
 
 model LessonAttachment {

@@ -10,13 +10,13 @@ export class LessonService {
 
   async create(createLessonDto: CreateLessonDto) {
     // Check if chapter exists
-    const chapter = await this.prisma.chapter.findUnique({
-      where: { id: createLessonDto.chapterId },
+    const chapter = await this.prisma.course.findUnique({
+      where: { id: createLessonDto.courseId },
     });
 
     if (!chapter) {
       throw new NotFoundException(
-        `Chapter with ID ${createLessonDto.chapterId} not found`,
+        `Chapter with ID ${createLessonDto.courseId} not found`,
       );
     }
 
@@ -61,18 +61,18 @@ export class LessonService {
     });
   }
 
-  async findAllByChapterId(chapterId: number) {
+  async findAllByCourseId(courseId: number) {
     // Check if chapter exists
-    const chapter = await this.prisma.chapter.findUnique({
-      where: { id: chapterId },
+    const chapter = await this.prisma.course.findUnique({
+      where: { id: courseId },
     });
 
     if (!chapter) {
-      throw new NotFoundException(`Chapter with ID ${chapterId} not found`);
+      throw new NotFoundException(`Chapter with ID ${courseId} not found`);
     }
 
     return this.prisma.lesson.findMany({
-      where: { chapterId },
+      where: { courseId },
       include: {
         test: {
           include: {
