@@ -58,7 +58,16 @@ export type Option = $Result.DefaultSelection<Prisma.$OptionPayload>
  * Enums
  */
 export namespace $Enums {
-  export const LessonAttachmentType: {
+  export const Complexity: {
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD'
+};
+
+export type Complexity = (typeof Complexity)[keyof typeof Complexity]
+
+
+export const LessonAttachmentType: {
   VIDEO: 'VIDEO',
   IMAGE: 'IMAGE',
   ARCHIVE: 'ARCHIVE',
@@ -86,6 +95,10 @@ export const TestStageType: {
 export type TestStageType = (typeof TestStageType)[keyof typeof TestStageType]
 
 }
+
+export type Complexity = $Enums.Complexity
+
+export const Complexity: typeof $Enums.Complexity
 
 export type LessonAttachmentType = $Enums.LessonAttachmentType
 
@@ -3989,6 +4002,7 @@ export namespace Prisma {
     description: string | null
     imageUrl: string | null
     teacherId: number | null
+    complexity: $Enums.Complexity | null
   }
 
   export type CourseMaxAggregateOutputType = {
@@ -3997,6 +4011,7 @@ export namespace Prisma {
     description: string | null
     imageUrl: string | null
     teacherId: number | null
+    complexity: $Enums.Complexity | null
   }
 
   export type CourseCountAggregateOutputType = {
@@ -4005,6 +4020,7 @@ export namespace Prisma {
     description: number
     imageUrl: number
     teacherId: number
+    complexity: number
     _all: number
   }
 
@@ -4025,6 +4041,7 @@ export namespace Prisma {
     description?: true
     imageUrl?: true
     teacherId?: true
+    complexity?: true
   }
 
   export type CourseMaxAggregateInputType = {
@@ -4033,6 +4050,7 @@ export namespace Prisma {
     description?: true
     imageUrl?: true
     teacherId?: true
+    complexity?: true
   }
 
   export type CourseCountAggregateInputType = {
@@ -4041,6 +4059,7 @@ export namespace Prisma {
     description?: true
     imageUrl?: true
     teacherId?: true
+    complexity?: true
     _all?: true
   }
 
@@ -4136,6 +4155,7 @@ export namespace Prisma {
     description: string
     imageUrl: string | null
     teacherId: number
+    complexity: $Enums.Complexity
     _count: CourseCountAggregateOutputType | null
     _avg: CourseAvgAggregateOutputType | null
     _sum: CourseSumAggregateOutputType | null
@@ -4163,6 +4183,7 @@ export namespace Prisma {
     description?: boolean
     imageUrl?: boolean
     teacherId?: boolean
+    complexity?: boolean
     lessons?: boolean | Course$lessonsArgs<ExtArgs>
     teacher?: boolean | UserDefaultArgs<ExtArgs>
     students?: boolean | Course$studentsArgs<ExtArgs>
@@ -4175,6 +4196,7 @@ export namespace Prisma {
     description?: boolean
     imageUrl?: boolean
     teacherId?: boolean
+    complexity?: boolean
     teacher?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -4184,6 +4206,7 @@ export namespace Prisma {
     description?: boolean
     imageUrl?: boolean
     teacherId?: boolean
+    complexity?: boolean
     teacher?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -4193,9 +4216,10 @@ export namespace Prisma {
     description?: boolean
     imageUrl?: boolean
     teacherId?: boolean
+    complexity?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "imageUrl" | "teacherId", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "imageUrl" | "teacherId" | "complexity", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lessons?: boolean | Course$lessonsArgs<ExtArgs>
     teacher?: boolean | UserDefaultArgs<ExtArgs>
@@ -4222,6 +4246,7 @@ export namespace Prisma {
       description: string
       imageUrl: string | null
       teacherId: number
+      complexity: $Enums.Complexity
     }, ExtArgs["result"]["course"]>
     composites: {}
   }
@@ -4653,6 +4678,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Course", 'String'>
     readonly imageUrl: FieldRef<"Course", 'String'>
     readonly teacherId: FieldRef<"Course", 'Int'>
+    readonly complexity: FieldRef<"Course", 'Complexity'>
   }
     
 
@@ -10711,7 +10737,8 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     imageUrl: 'imageUrl',
-    teacherId: 'teacherId'
+    teacherId: 'teacherId',
+    complexity: 'complexity'
   };
 
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -10847,6 +10874,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Complexity'
+   */
+  export type EnumComplexityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Complexity'>
+    
+
+
+  /**
+   * Reference to a field of type 'Complexity[]'
+   */
+  export type ListEnumComplexityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Complexity[]'>
     
 
 
@@ -11019,6 +11060,7 @@ export namespace Prisma {
     description?: StringFilter<"Course"> | string
     imageUrl?: StringNullableFilter<"Course"> | string | null
     teacherId?: IntFilter<"Course"> | number
+    complexity?: EnumComplexityFilter<"Course"> | $Enums.Complexity
     lessons?: LessonListRelationFilter
     teacher?: XOR<UserScalarRelationFilter, UserWhereInput>
     students?: UserListRelationFilter
@@ -11030,6 +11072,7 @@ export namespace Prisma {
     description?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
     teacherId?: SortOrder
+    complexity?: SortOrder
     lessons?: LessonOrderByRelationAggregateInput
     teacher?: UserOrderByWithRelationInput
     students?: UserOrderByRelationAggregateInput
@@ -11044,6 +11087,7 @@ export namespace Prisma {
     description?: StringFilter<"Course"> | string
     imageUrl?: StringNullableFilter<"Course"> | string | null
     teacherId?: IntFilter<"Course"> | number
+    complexity?: EnumComplexityFilter<"Course"> | $Enums.Complexity
     lessons?: LessonListRelationFilter
     teacher?: XOR<UserScalarRelationFilter, UserWhereInput>
     students?: UserListRelationFilter
@@ -11055,6 +11099,7 @@ export namespace Prisma {
     description?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
     teacherId?: SortOrder
+    complexity?: SortOrder
     _count?: CourseCountOrderByAggregateInput
     _avg?: CourseAvgOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
@@ -11071,6 +11116,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Course"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
     teacherId?: IntWithAggregatesFilter<"Course"> | number
+    complexity?: EnumComplexityWithAggregatesFilter<"Course"> | $Enums.Complexity
   }
 
   export type LessonWhereInput = {
@@ -11455,6 +11501,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
     lessons?: LessonCreateNestedManyWithoutCourseInput
     teacher: UserCreateNestedOneWithoutCoursesInput
     students?: UserCreateNestedManyWithoutStudentCoursesInput
@@ -11466,6 +11513,7 @@ export namespace Prisma {
     description: string
     imageUrl?: string | null
     teacherId: number
+    complexity?: $Enums.Complexity
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
     students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
   }
@@ -11474,6 +11522,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUpdateManyWithoutCourseNestedInput
     teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
     students?: UserUpdateManyWithoutStudentCoursesNestedInput
@@ -11485,6 +11534,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: IntFieldUpdateOperationsInput | number
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
     students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
   }
@@ -11495,12 +11545,14 @@ export namespace Prisma {
     description: string
     imageUrl?: string | null
     teacherId: number
+    complexity?: $Enums.Complexity
   }
 
   export type CourseUpdateManyMutationInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
   }
 
   export type CourseUncheckedUpdateManyInput = {
@@ -11509,6 +11561,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: IntFieldUpdateOperationsInput | number
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
   }
 
   export type LessonCreateInput = {
@@ -11965,6 +12018,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumComplexityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Complexity | EnumComplexityFieldRefInput<$PrismaModel>
+    in?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    not?: NestedEnumComplexityFilter<$PrismaModel> | $Enums.Complexity
+  }
+
   export type LessonListRelationFilter = {
     every?: LessonWhereInput
     some?: LessonWhereInput
@@ -11991,6 +12051,7 @@ export namespace Prisma {
     description?: SortOrder
     imageUrl?: SortOrder
     teacherId?: SortOrder
+    complexity?: SortOrder
   }
 
   export type CourseAvgOrderByAggregateInput = {
@@ -12004,6 +12065,7 @@ export namespace Prisma {
     description?: SortOrder
     imageUrl?: SortOrder
     teacherId?: SortOrder
+    complexity?: SortOrder
   }
 
   export type CourseMinOrderByAggregateInput = {
@@ -12012,11 +12074,22 @@ export namespace Prisma {
     description?: SortOrder
     imageUrl?: SortOrder
     teacherId?: SortOrder
+    complexity?: SortOrder
   }
 
   export type CourseSumOrderByAggregateInput = {
     id?: SortOrder
     teacherId?: SortOrder
+  }
+
+  export type EnumComplexityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Complexity | EnumComplexityFieldRefInput<$PrismaModel>
+    in?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    not?: NestedEnumComplexityWithAggregatesFilter<$PrismaModel> | $Enums.Complexity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumComplexityFilter<$PrismaModel>
+    _max?: NestedEnumComplexityFilter<$PrismaModel>
   }
 
   export type TestNullableScalarRelationFilter = {
@@ -12481,6 +12554,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutStudentCoursesInput, UserUncheckedCreateWithoutStudentCoursesInput> | UserCreateWithoutStudentCoursesInput[] | UserUncheckedCreateWithoutStudentCoursesInput[]
     connectOrCreate?: UserCreateOrConnectWithoutStudentCoursesInput | UserCreateOrConnectWithoutStudentCoursesInput[]
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type EnumComplexityFieldUpdateOperationsInput = {
+    set?: $Enums.Complexity
   }
 
   export type LessonUpdateManyWithoutCourseNestedInput = {
@@ -12990,6 +13067,23 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumComplexityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Complexity | EnumComplexityFieldRefInput<$PrismaModel>
+    in?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    not?: NestedEnumComplexityFilter<$PrismaModel> | $Enums.Complexity
+  }
+
+  export type NestedEnumComplexityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Complexity | EnumComplexityFieldRefInput<$PrismaModel>
+    in?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Complexity[] | ListEnumComplexityFieldRefInput<$PrismaModel>
+    not?: NestedEnumComplexityWithAggregatesFilter<$PrismaModel> | $Enums.Complexity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumComplexityFilter<$PrismaModel>
+    _max?: NestedEnumComplexityFilter<$PrismaModel>
+  }
+
   export type NestedEnumLessonAttachmentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.LessonAttachmentType | EnumLessonAttachmentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.LessonAttachmentType[] | ListEnumLessonAttachmentTypeFieldRefInput<$PrismaModel>
@@ -13073,6 +13167,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
     lessons?: LessonCreateNestedManyWithoutCourseInput
     students?: UserCreateNestedManyWithoutStudentCoursesInput
   }
@@ -13082,6 +13177,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
     students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
   }
@@ -13100,6 +13196,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
     lessons?: LessonCreateNestedManyWithoutCourseInput
     teacher: UserCreateNestedOneWithoutCoursesInput
   }
@@ -13110,6 +13207,7 @@ export namespace Prisma {
     description: string
     imageUrl?: string | null
     teacherId: number
+    complexity?: $Enums.Complexity
     lessons?: LessonUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -13167,6 +13265,7 @@ export namespace Prisma {
     description?: StringFilter<"Course"> | string
     imageUrl?: StringNullableFilter<"Course"> | string | null
     teacherId?: IntFilter<"Course"> | number
+    complexity?: EnumComplexityFilter<"Course"> | $Enums.Complexity
   }
 
   export type CourseUpsertWithWhereUniqueWithoutStudentsInput = {
@@ -13423,6 +13522,7 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
     teacher: UserCreateNestedOneWithoutCoursesInput
     students?: UserCreateNestedManyWithoutStudentCoursesInput
   }
@@ -13433,6 +13533,7 @@ export namespace Prisma {
     description: string
     imageUrl?: string | null
     teacherId: number
+    complexity?: $Enums.Complexity
     students?: UserUncheckedCreateNestedManyWithoutStudentCoursesInput
   }
 
@@ -13502,6 +13603,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
     students?: UserUpdateManyWithoutStudentCoursesNestedInput
   }
@@ -13512,6 +13614,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: IntFieldUpdateOperationsInput | number
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
   }
 
@@ -13874,12 +13977,14 @@ export namespace Prisma {
     title: string
     description: string
     imageUrl?: string | null
+    complexity?: $Enums.Complexity
   }
 
   export type CourseUpdateWithoutTeacherInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUpdateManyWithoutCourseNestedInput
     students?: UserUpdateManyWithoutStudentCoursesNestedInput
   }
@@ -13889,6 +13994,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
     students?: UserUncheckedUpdateManyWithoutStudentCoursesNestedInput
   }
@@ -13898,12 +14004,14 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
   }
 
   export type CourseUpdateWithoutStudentsInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUpdateManyWithoutCourseNestedInput
     teacher?: UserUpdateOneRequiredWithoutCoursesNestedInput
   }
@@ -13914,6 +14022,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: IntFieldUpdateOperationsInput | number
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
     lessons?: LessonUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -13923,6 +14032,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     teacherId?: IntFieldUpdateOperationsInput | number
+    complexity?: EnumComplexityFieldUpdateOperationsInput | $Enums.Complexity
   }
 
   export type LessonCreateManyCourseInput = {

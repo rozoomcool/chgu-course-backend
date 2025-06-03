@@ -28,14 +28,21 @@ model Profile {
 }
 
 model Course {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   description String
   imageUrl    String?
   lessons     Lesson[]
-  teacher     User     @relation(fields: [teacherId], references: [id])
+  teacher     User       @relation(fields: [teacherId], references: [id])
   teacherId   Int
-  students    User[]   @relation("CourseStudents")
+  students    User[]     @relation("CourseStudents")
+  complexity  Complexity @default(EASY)
+}
+
+enum Complexity {
+  EASY
+  MEDIUM
+  HARD
 }
 
 model Lesson {

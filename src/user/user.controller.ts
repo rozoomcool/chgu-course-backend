@@ -1,39 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Request, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma, User } from 'generated/prisma';
+import { ProfileService } from 'src/profile/profile.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller({
-  path: 'users', 
+  path: 'users',
   version: '1'
 })
 export class UserController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly usersService: UserService) { }
 
   @Post()
   create(@Body() createUserDto: Prisma.UserCreateInput) {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Get()
+  @Get("all")
   findAll(
     @Query('skip') skip?: string,
-    @Query('take') take?: string,
-    @Query('cursor') cursor?: Prisma.UserWhereUniqueInput,
-    @Query('where') where?: Prisma.UserWhereInput,
-    @Query('orderBy') orderBy?: Prisma.UserOrderByWithRelationInput,
+    @Query('take') take?: string
   ) {
     return this.usersService.findMany({
       skip: skip ? parseInt(skip) : undefined,
-      take: take ? parseInt(take) : undefined,
-      cursor,
-      where,
-      orderBy,
+      take: take ? parseInt(take) : undefined
     });
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.usersService.findOne({ id });
+  }
+
+  @Get()
+  getCurrent(@Request() req) {
+    return this.usersService.findOneWithProfile(Number.parseInt(req.user.id));
   }
 
   @Patch(':id')

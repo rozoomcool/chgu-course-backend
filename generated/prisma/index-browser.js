@@ -140,7 +140,8 @@ exports.Prisma.CourseScalarFieldEnum = {
   title: 'title',
   description: 'description',
   imageUrl: 'imageUrl',
-  teacherId: 'teacherId'
+  teacherId: 'teacherId',
+  complexity: 'complexity'
 };
 
 exports.Prisma.LessonScalarFieldEnum = {
@@ -195,6 +196,12 @@ exports.Role = exports.$Enums.Role = {
   MODERATOR: 'MODERATOR',
   TEACHER: 'TEACHER',
   STUDENT: 'STUDENT'
+};
+
+exports.Complexity = exports.$Enums.Complexity = {
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD'
 };
 
 exports.LessonAttachmentType = exports.$Enums.LessonAttachmentType = {

@@ -24,9 +24,11 @@ export class CourseController {
             errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
         })) file: Express.Multer.File, @Body() data: CreateCourseDto, @Request() req) {
         data.imageUrl = file.filename;
+        console.log(file.filename);
         try {
             return await this.courseService.create(data, req.user.id);
         } catch (e) {
+            console.log(e);
             throw new HttpException("bad credentials", HttpStatus.BAD_REQUEST);
         }
     }
@@ -35,22 +37,16 @@ export class CourseController {
     findAll(
         @Query('skip') skip?: string,
         @Query('take') take?: string,
-        @Query('cursor') cursor?: Prisma.CourseWhereUniqueInput,
-        @Query('where') where?: Prisma.CourseWhereInput,
-        @Query('orderBy') orderBy?: Prisma.CourseOrderByWithRelationInput,
     ) {
         return this.courseService.findMany({
             skip: skip ? parseInt(skip) : 0,
             take: take ? parseInt(take) : 10,
-            cursor,
-            where,
-            orderBy,
         });
     }
 
-    @Get()
+    @Get('all/teacher/:teacherId')
     findByTeacherId(
-        @Query('teacherId') teacherId?: number,
+        @Param('teacherId', ParseIntPipe) teacherId: number,
     ) {
         return this.courseService.findMany({
             where: { teacherId },

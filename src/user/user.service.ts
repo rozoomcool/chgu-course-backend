@@ -11,8 +11,19 @@ export class UserService {
     async findOne(
         userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     ): Promise<User | null> {
-        return this.prisma.user.findUnique({
+        return await this.prisma.user.findUnique({
             where: userWhereUniqueInput,
+        });
+    }
+
+    async findOneWithProfile(
+        userId: number,
+    ): Promise<User | null> {
+        return await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                profile: true,
+            },
         });
     }
 
