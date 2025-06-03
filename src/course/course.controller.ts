@@ -24,7 +24,6 @@ export class CourseController {
             errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
         })) file: Express.Multer.File, @Body() data: CreateCourseDto, @Request() req) {
         data.imageUrl = file.filename;
-        console.log(file.filename);
         try {
             return await this.courseService.create(data, req.user.id);
         } catch (e) {

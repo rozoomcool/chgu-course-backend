@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { MulterOptionsFactory, MulterModuleOptions } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
+import { validateImageFile } from './file-upload.config';
 
 export const multerConfig = {
   storage: diskStorage({
@@ -16,11 +17,12 @@ export const multerConfig = {
 };
 
 export const imageFileFilter = (req, file, callback) => {
-  // Allow only image files
-  if (!file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
-    return callback(new Error('Only image files are allowed'), false);
+  try {
+    validateImageFile(file);
+    callback(null, true);
+  } catch(e) {
+    callback(e, false);
   }
-  callback(null, true);
 };
 
 @Injectable()
