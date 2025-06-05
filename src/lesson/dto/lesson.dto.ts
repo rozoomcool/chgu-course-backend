@@ -22,4 +22,8 @@ export class UpdateLessonDto {
   @IsOptional()
   @IsString()
   lecture?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  courseId: number;
 }

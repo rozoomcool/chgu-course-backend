@@ -1,5 +1,5 @@
 // lesson.service.ts (обновленный)
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
 import { CreateLessonDto, UpdateLessonDto } from './dto/lesson.dto';
@@ -8,15 +8,21 @@ import { CreateLessonDto, UpdateLessonDto } from './dto/lesson.dto';
 export class LessonService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createLessonDto: CreateLessonDto) {
+  async create(createLessonDto: CreateLessonDto, userId: number) {
     // Check if chapter exists
-    const chapter = await this.prisma.course.findUnique({
+    const course = await this.prisma.course.findUnique({
       where: { id: createLessonDto.courseId },
     });
 
-    if (!chapter) {
+    if (!course) {
       throw new NotFoundException(
-        `Chapter with ID ${createLessonDto.courseId} not found`,
+        `Course with ID ${createLessonDto.courseId} not found`,
+      );
+    }
+
+    if (course.teacherId != userId) {
+      throw new NotAcceptableException(
+        `You are not permitted to course with ID ${createLessonDto.courseId}`,
       );
     }
 
@@ -63,12 +69,12 @@ export class LessonService {
 
   async findAllByCourseId(courseId: number) {
     // Check if chapter exists
-    const chapter = await this.prisma.course.findUnique({
+    const course = await this.prisma.course.findUnique({
       where: { id: courseId },
     });
 
-    if (!chapter) {
-      throw new NotFoundException(`Chapter with ID ${courseId} not found`);
+    if (!course) {
+      throw new NotFoundException(`Course with ID ${courseId} not found`);
     }
 
     return this.prisma.lesson.findMany({
@@ -79,6 +85,7 @@ export class LessonService {
             testStages: {
               include: {
                 options: true,
+                answer: true,
               },
             },
           },
@@ -113,8 +120,25 @@ export class LessonService {
     return lesson;
   }
 
-  async update(id: number, updateLessonDto: UpdateLessonDto) {
+  async update(id: number, userId: number, updateLessonDto: UpdateLessonDto) {
     try {
+
+      const course = await this.prisma.course.findUnique({
+        where: { id: updateLessonDto.courseId },
+      });
+  
+      if (!course) {
+        throw new NotFoundException(
+          `Course with ID ${updateLessonDto.courseId} not found`,
+        );
+      }
+
+      if (course.teacherId != userId) {
+        throw new NotAcceptableException(
+          `You are not permitted to lesson with ID ${course.id}`,
+        );
+      }
+
       return await this.prisma.lesson.update({
         where: { id },
         data: updateLessonDto,
