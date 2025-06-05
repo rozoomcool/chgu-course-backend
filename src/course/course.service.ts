@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { Course, Prisma } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/createCourse.dto';
@@ -69,11 +69,13 @@ export class CourseService {
         });
     }
 
-    async findOne(id: number) {
+    async findOne(id: number, lessons: boolean, students: boolean, teacher: boolean) {
         const course = await this.prisma.course.findUnique({
             where: { id },
             include: {
-                lessons: true,
+                lessons,
+                teacher,
+                students
             },
         });
 
@@ -84,22 +86,34 @@ export class CourseService {
         return course;
     }
 
-    async update(id: number, updateCourseDto: UpdateCourseDto) {
+    async update(id: number, userId: number, updateCourseDto: UpdateCourseDto) {
         try {
-            return await this.prisma.course.update({
-                where: { id },
-                data: updateCourseDto,
-            });
+            const course = (await this.prisma.course.findUnique({
+                where: { id }
+            }))!;
+
+            if (course.teacherId == userId) {
+                return await this.prisma.course.update({
+                    where: { id },
+                    data: updateCourseDto,
+                });
+            }
+
+            throw new NotAcceptableException("You cant accept to this entity");
         } catch (error) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
     }
 
-    async remove(id: number) {
+    async remove(id: number, userId: number) {
         try {
-            return await this.prisma.course.delete({
-                where: { id },
-            });
+            const course = (await this.prisma.course.findUnique({ where: { id } }))!;
+            if (course.teacherId == userId) {
+                return await this.prisma.course.delete({
+                    where: { id },
+                });
+            }
+            throw new NotAcceptableException("You cant accept to this entity");
         } catch (error) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }

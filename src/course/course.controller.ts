@@ -1,4 +1,4 @@
-import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors, ParseBoolPipe, Put } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { Prisma, Role } from 'generated/prisma';
 import { CreateCourseDto } from './dto/createCourse.dto';
@@ -64,20 +64,38 @@ export class CourseController {
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number) {
-        return this.courseService.findOne(id);
+    findOne(@Param('id', ParseIntPipe) id: number,
+        @Query('teacher') teacher: boolean = false,
+        @Query('lessons') lessons: boolean = false,
+        @Query('students') students: boolean = false,
+    ) {
+        return this.courseService.findOne(id, lessons, students, teacher);
     }
 
-    @Patch(':id')
+    @Put(':id')
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    @UseInterceptors(ImageFileUploadInterceptor)
     update(
         @Param('id', ParseIntPipe) id: number,
+        @UploadedFile(new ParseFilePipeBuilder()
+            .build({
+                fileIsRequired: false,
+                errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+            })) file: Express.Multer.File | null,
         @Body() updateCourseDto: UpdateCourseDto,
+        @Request() req
     ) {
-        return this.courseService.update(id, updateCourseDto);
+        if (file != null) {
+            updateCourseDto.imageUrl = file.filename;
+        }
+        return this.courseService.update(id, Number.parseInt(req.user.id), updateCourseDto);
     }
 
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
-        return this.courseService.remove(id);
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
+        return this.courseService.remove(id, Number.parseInt(req.user.id));
     }
 }

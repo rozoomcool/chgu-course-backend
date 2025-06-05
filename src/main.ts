@@ -17,7 +17,12 @@ async function bootstrap() {
     jsonDocumentUrl: 'swagger/json',
   });
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
   app.setGlobalPrefix("api");
   app.enableVersioning({
     type: VersioningType.URI,
