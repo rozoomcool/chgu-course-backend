@@ -16,6 +16,8 @@ model User {
   profile        Profile?
   courses        Course[]
   studentCourses Course[] @relation("CourseStudents")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
 }
 
 model Profile {
@@ -25,6 +27,8 @@ model Profile {
   avatarUrl String?
   userId    Int       @unique
   user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Course {
@@ -37,6 +41,8 @@ model Course {
   teacherId   Int
   students    User[]     @relation("CourseStudents")
   complexity  Complexity @default(EASY)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
 }
 
 enum Complexity {
@@ -48,11 +54,13 @@ enum Complexity {
 model Lesson {
   id          Int                @id @default(autoincrement())
   title       String
-  lecture     String?
+  lecture     String
   test        Test?
   attachments LessonAttachment[]
   courseId    Int
   course      Course             @relation(fields: [courseId], references: [id])
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @default(now()) @updatedAt
 }
 
 model LessonAttachment {
@@ -61,6 +69,8 @@ model LessonAttachment {
   attachmentType LessonAttachmentType
   lesson         Lesson               @relation(fields: [lessonId], references: [id])
   lessonId       Int                  @unique
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @default(now()) @updatedAt
 }
 
 enum LessonAttachmentType {
@@ -75,6 +85,8 @@ model Test {
   lesson     Lesson?     @relation(fields: [lessonId], references: [id])
   lessonId   Int?        @unique
   testStages TestStage[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
 }
 
 model TestStage {
@@ -82,18 +94,17 @@ model TestStage {
   test     Test          @relation(fields: [testId], references: [id])
   testId   Int
   type     TestStageType @default(OPTIONAL)
-  answerId Int           @unique
+  answerId Int?          @unique
   options  Option[]
   question String
-  answer   Option        @relation("TestStageAnswerOption", fields: [answerId], references: [id])
 }
 
 model Option {
-  id          Int        @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   option      String
   testStageId Int
-  testStage   TestStage  @relation(fields: [testStageId], references: [id])
-  answerFor   TestStage? @relation("TestStageAnswerOption")
+  testStage   TestStage @relation(fields: [testStageId], references: [id])
+  isCorret    Boolean
 }
 
 enum Role {

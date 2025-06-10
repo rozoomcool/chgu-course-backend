@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
 import { CreateTestStageDto, UpdateTestStageDto } from './dto/test.dto';
@@ -7,33 +7,46 @@ import { CreateTestStageDto, UpdateTestStageDto } from './dto/test.dto';
 export class TestStageService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createTestStageDto: CreateTestStageDto) {
+    async create(createTestStageDto: CreateTestStageDto, creatorId: number) {
         // Check if test exists
         const test = await this.prisma.test.findUnique({
             where: { id: createTestStageDto.testId },
         });
-
+        
         if (!test) {
             throw new NotFoundException(
                 `Test with ID ${createTestStageDto.testId} not found`,
             );
         }
 
-        // Для создания TestStage нужно сначала создать ответ (Option)
-        // Но в данном случае id ответа приходит из DTO напрямую (answerId)
-        // Проверяем, существует ли указанный Option
-        const option = await this.prisma.option.findUnique({
-            where: { id: createTestStageDto.answerId },
-        });
+        const lesson = await this.prisma.lesson.findUnique({
+            where: {id: test.lessonId!}
+        })
 
-        if (!option) {
+        if (!lesson) {
             throw new NotFoundException(
-                `Option with ID ${createTestStageDto.answerId} not found`,
+                `Lesson not found`,
             );
         }
 
-        return this.prisma.testStage.create({
-            data: createTestStageDto,
+        const course = await this.prisma.course.findUnique({
+            where: {id: lesson.courseId}
+        })
+
+        if (!course) {
+            throw new NotFoundException(
+                `Course not found`,
+            );
+        }
+
+        if (course.teacherId != creatorId) {
+            throw new NotAcceptableException("User is not owner of this test");
+        }
+        
+        return await this.prisma.testStage.create({
+            data: {
+                ...createTestStageDto,
+            },
             include: {
                 options: true,
                 answer: true,

@@ -6,10 +6,11 @@ import { OptionService } from './option.service';
 import { TestStageController } from './testStage.controller';
 import { OptionController } from './option.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   providers: [TestService, TestStageService, OptionService],
   controllers: [TestController, TestStageController, OptionController],
-  imports: [PrismaModule]
+  imports: [PrismaModule, AuthModule]
 })
 export class TestModule { }

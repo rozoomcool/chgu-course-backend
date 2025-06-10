@@ -26,10 +26,6 @@ export class CreateTestStageDto {
   @IsNotEmpty()
   @IsString()
   question: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  answerId: number;
 }
 
 export class UpdateTestStageDto {

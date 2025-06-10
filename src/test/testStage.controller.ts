@@ -8,35 +8,35 @@ import {
     Delete,
     ParseIntPipe,
     Query,
+    UseGuards,
+    Request
 } from '@nestjs/common';
 import { TestStageService } from './testStage.service';
 import { CreateTestStageDto, UpdateTestStageDto } from './dto/test.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'generated/prisma';
 
 @Controller({ path: 'test-stages', version: '1' })
 export class TestStageController {
     constructor(private readonly testStageService: TestStageService) { }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
     @Post()
-    create(@Body() createTestStageDto: CreateTestStageDto) {
-        return this.testStageService.create(createTestStageDto);
+    create(@Body() createTestStageDto: CreateTestStageDto, @Request() req) {
+        return this.testStageService.create(createTestStageDto, Number.parseInt(req.user.id));
     }
 
     @Get()
     findAll(
         @Query('skip') skip?: string,
-        @Query('take') take?: string,
-        @Query('cursor') cursor?: string,
-        @Query('where') where?: string,
-        @Query('orderBy') orderBy?: string,
-        @Query('include') include?: string,
+        @Query('take') take?: string
     ) {
         return this.testStageService.findMany({
             skip: skip ? parseInt(skip) : undefined,
-            take: take ? parseInt(take) : undefined,
-            cursor: cursor ? JSON.parse(cursor) : undefined,
-            where: where ? JSON.parse(where) : undefined,
-            orderBy: orderBy ? JSON.parse(orderBy) : undefined,
-            include: include ? JSON.parse(include) : undefined,
+            take: take ? parseInt(take) : undefined
         });
     }
 

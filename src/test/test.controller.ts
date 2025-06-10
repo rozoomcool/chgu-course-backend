@@ -9,36 +9,37 @@ import {
     Delete,
     ParseIntPipe,
     Query,
+    UseGuards,
+    Request
 } from '@nestjs/common';
 import { TestService } from './test.service';
-import { Prisma } from '../../generated/prisma';
+import { Prisma, Role } from '../../generated/prisma';
 import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller({ path: 'tests', version: '1' })
 export class TestController {
     constructor(private readonly testService: TestService) { }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
     @Post()
-    create(@Body() createTestDto: CreateTestDto) {
-        return this.testService.create(createTestDto);
+    create(@Body() createTestDto: CreateTestDto, @Request() req) {
+        return this.testService.create(createTestDto, Number.parseInt(req.user.id));
     }
 
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Get()
     findAll(
         @Query('skip') skip?: string,
         @Query('take') take?: string,
-        @Query('cursor') cursor?: string,
-        @Query('where') where?: string,
-        @Query('orderBy') orderBy?: string,
-        @Query('include') include?: string,
     ) {
         return this.testService.findMany({
             skip: skip ? parseInt(skip) : undefined,
             take: take ? parseInt(take) : undefined,
-            cursor: cursor ? JSON.parse(cursor) : undefined,
-            where: where ? JSON.parse(where) : undefined,
-            orderBy: orderBy ? JSON.parse(orderBy) : undefined,
-            include: include ? JSON.parse(include) : undefined,
         });
     }
 

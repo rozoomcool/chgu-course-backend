@@ -1,13 +1,11 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateLessonDto {
-  @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsOptional()
   @IsString()
-  lecture?: string;
+  lecture: string;
 
   @IsNotEmpty()
   @IsNumber()

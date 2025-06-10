@@ -1,5 +1,5 @@
 // test.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
 import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
@@ -8,7 +8,7 @@ import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
 export class TestService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createTestDto: CreateTestDto) {
+    async create(createTestDto: CreateTestDto, creatorId: number) {
         if (createTestDto.lessonId) {
             // Check if lesson exists
             const lesson = await this.prisma.lesson.findUnique({
@@ -21,13 +21,27 @@ export class TestService {
                 );
             }
 
+            const course = await this.prisma.course.findUnique({ where: { id: lesson.courseId } })
+
+            if (!course) {
+                throw new NotFoundException(
+                    `Course with ID ${createTestDto.lessonId} not found`,
+                );
+            }
+
+            if (course.teacherId != creatorId) {
+                throw new NotAcceptableException(
+                    `User is not owner of this lesson`,
+                );
+            }
+
             // Check if test already exists for this lesson
             const existingTest = await this.prisma.test.findUnique({
                 where: { lessonId: createTestDto.lessonId },
             });
 
             if (existingTest) {
-                throw new Error(
+                throw new BadRequestException(
                     `Test already exists for lesson with ID ${createTestDto.lessonId}`,
                 );
             }
@@ -35,6 +49,14 @@ export class TestService {
 
         return this.prisma.test.create({
             data: createTestDto,
+            include: {
+                testStages: {
+                    include: {
+                        options: true,
+                        answer: true
+                    }   
+                }
+            }
         });
     }
 
