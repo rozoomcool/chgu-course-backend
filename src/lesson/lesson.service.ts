@@ -85,7 +85,6 @@ export class LessonService {
             testStages: {
               include: {
                 options: true,
-                answer: true,
               },
             },
           },
@@ -104,7 +103,6 @@ export class LessonService {
             testStages: {
               include: {
                 options: true,
-                answer: true,
               },
             },
           },

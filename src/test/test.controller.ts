@@ -16,21 +16,21 @@ import { TestService } from './test.service';
 import { Prisma, Role } from '../../generated/prisma';
 import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller({ path: 'tests', version: '1' })
 export class TestController {
     constructor(private readonly testService: TestService) { }
 
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     @Post()
     create(@Body() createTestDto: CreateTestDto, @Request() req) {
-        return this.testService.create(createTestDto, Number.parseInt(req.user.id));
+        return this.testService.addTestToLesson(createTestDto, Number.parseInt(req.user.id));
     }
 
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
     @Get()
     findAll(

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { TestStageService } from './testStage.service';
 import { CreateTestStageDto, UpdateTestStageDto } from './dto/test.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'generated/prisma';
@@ -22,7 +22,7 @@ import { Role } from 'generated/prisma';
 export class TestStageController {
     constructor(private readonly testStageService: TestStageService) { }
 
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     @Post()
     create(@Body() createTestStageDto: CreateTestStageDto, @Request() req) {
@@ -58,8 +58,10 @@ export class TestStageController {
         return this.testStageService.update(id, updateTestStageDto);
     }
 
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
-        return this.testStageService.remove(id);
+    remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
+        return this.testStageService.remove(id, Number.parseInt(req.user.id));
     }
 }

@@ -15,6 +15,7 @@ model User {
   role           Role
   profile        Profile?
   courses        Course[]
+  tests          Test[]
   studentCourses Course[] @relation("CourseStudents")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @default(now()) @updatedAt
@@ -87,6 +88,8 @@ model Test {
   testStages TestStage[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @default(now()) @updatedAt
+  Owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     Int
 }
 
 model TestStage {
@@ -94,7 +97,6 @@ model TestStage {
   test     Test          @relation(fields: [testId], references: [id])
   testId   Int
   type     TestStageType @default(OPTIONAL)
-  answerId Int?          @unique
   options  Option[]
   question String
 }
@@ -102,9 +104,9 @@ model TestStage {
 model Option {
   id          Int       @id @default(autoincrement())
   option      String
+  isCorrect   Boolean
   testStageId Int
   testStage   TestStage @relation(fields: [testStageId], references: [id])
-  isCorret    Boolean
 }
 
 enum Role {

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
 import { CreateOptionDto, UpdateOptionDto } from './dto/test.dto';
@@ -7,7 +7,7 @@ import { CreateOptionDto, UpdateOptionDto } from './dto/test.dto';
 export class OptionService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createOptionDto: CreateOptionDto) {
+    async create(createOptionDto: CreateOptionDto, creatorId: number) {
         // Check if test stage exists
         const testStage = await this.prisma.testStage.findUnique({
             where: { id: createOptionDto.testStageId },
@@ -19,6 +19,20 @@ export class OptionService {
             );
         }
 
+        const test = await this.prisma.test.findUnique({
+            where: { id: testStage.testId }
+        })
+
+        if (!test) {
+            throw new NotFoundException(
+                `Test with ID ${testStage.testId} not found`,
+            );
+        }
+
+        if (test.ownerId != creatorId) {
+            throw new NotAcceptableException("User is not owner of this test");
+        }
+
         return this.prisma.option.create({
             data: createOptionDto,
         });
@@ -28,7 +42,6 @@ export class OptionService {
         return this.prisma.option.findMany({
             include: {
                 testStage: true,
-                answerFor: true,
             },
         });
     }
@@ -57,7 +70,6 @@ export class OptionService {
             where: { id },
             include: {
                 testStage: true,
-                answerFor: true,
             },
         });
 
@@ -94,8 +106,42 @@ export class OptionService {
         }
     }
 
-    async remove(id: number) {
+    async remove(id: number, creatorId: number) {
         try {
+            const option = await this.prisma.option.findUnique({
+                where: { id: id }
+            })
+
+            if (!option) {
+                throw new NotFoundException(
+                    `Option with ID ${id} not found`,
+                );
+            }
+
+            const testStage = await this.prisma.testStage.findUnique({
+                where: { id: option.testStageId },
+            });
+
+            if (!testStage) {
+                throw new NotFoundException(
+                    `Test stage with ID ${option.testStageId} not found`,
+                );
+            }
+
+            const test = await this.prisma.test.findUnique({
+                where: { id: testStage.testId }
+            })
+
+            if (!test) {
+                throw new NotFoundException(
+                    `Test with ID ${testStage.testId} not found`,
+                );
+            }
+
+            if (test.ownerId != creatorId) {
+                throw new NotAcceptableException("User is not owner of this test");
+            }
+
             return await this.prisma.option.delete({
                 where: { id },
             });

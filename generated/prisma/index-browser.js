@@ -172,20 +172,21 @@ exports.Prisma.TestScalarFieldEnum = {
   id: 'id',
   lessonId: 'lessonId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  ownerId: 'ownerId'
 };
 
 exports.Prisma.TestStageScalarFieldEnum = {
   id: 'id',
   testId: 'testId',
   type: 'type',
-  answerId: 'answerId',
   question: 'question'
 };
 
 exports.Prisma.OptionScalarFieldEnum = {
   id: 'id',
   option: 'option',
+  isCorrect: 'isCorrect',
   testStageId: 'testStageId'
 };
 

@@ -4,7 +4,7 @@ import { Prisma, Role } from 'generated/prisma';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
 import { ImageFileUploadInterceptor } from 'src/config/imageFileUpload.interceptor';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
@@ -16,7 +16,7 @@ export class CourseController {
     ) { }
 
     @Post()
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     @UseInterceptors(ImageFileUploadInterceptor)
     async create(@UploadedFile(new ParseFilePipeBuilder()
@@ -26,6 +26,18 @@ export class CourseController {
         data.imageUrl = file.filename;
         try {
             return await this.courseService.create(data, req.user.id);
+        } catch (e) {
+            console.log(e);
+            throw new HttpException("bad credentials", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Delete(":courseId/lesson/:lessonId")
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    async deleteLesson(@Param('courseId', ParseIntPipe) courseId: number, @Param('lessonId', ParseIntPipe) lessonId: number, @Request() req) {
+        try {
+            return await this.courseService.deleteLesson(courseId, lessonId, Number.parseInt(req.user.id));
         } catch (e) {
             console.log(e);
             throw new HttpException("bad credentials", HttpStatus.BAD_REQUEST);
@@ -73,7 +85,7 @@ export class CourseController {
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     @UseInterceptors(ImageFileUploadInterceptor)
     update(
@@ -93,7 +105,7 @@ export class CourseController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard, RolesGuard)
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
         return this.courseService.remove(id, Number.parseInt(req.user.id));

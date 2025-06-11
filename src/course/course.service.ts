@@ -86,6 +86,30 @@ export class CourseService {
         return course;
     }
 
+    async deleteLesson(courseId: number, lessonId: number, creatorId: number) {
+        try {
+            const course = (await this.prisma.course.findUnique({
+                where: { id: courseId },
+                include: {
+                    lessons: {
+                        where: { id: lessonId }
+                    }
+                }
+            }))!;
+
+            if (course.teacherId != creatorId) {
+                throw new NotAcceptableException("You cant accept to this entity");
+            }
+
+            await this.prisma.lesson.delete({
+                where: { id: course.lessons[0].id }
+            })
+
+        } catch (error) {
+            throw new NotFoundException(`Lesson with ID ${lessonId} not found`);
+        }
+    }
+
     async update(id: number, userId: number, updateCourseDto: UpdateCourseDto) {
         try {
             const course = (await this.prisma.course.findUnique({

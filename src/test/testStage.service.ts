@@ -12,44 +12,23 @@ export class TestStageService {
         const test = await this.prisma.test.findUnique({
             where: { id: createTestStageDto.testId },
         });
-        
+
         if (!test) {
             throw new NotFoundException(
                 `Test with ID ${createTestStageDto.testId} not found`,
             );
         }
 
-        const lesson = await this.prisma.lesson.findUnique({
-            where: {id: test.lessonId!}
-        })
-
-        if (!lesson) {
-            throw new NotFoundException(
-                `Lesson not found`,
-            );
-        }
-
-        const course = await this.prisma.course.findUnique({
-            where: {id: lesson.courseId}
-        })
-
-        if (!course) {
-            throw new NotFoundException(
-                `Course not found`,
-            );
-        }
-
-        if (course.teacherId != creatorId) {
+        if (test.ownerId != creatorId) {
             throw new NotAcceptableException("User is not owner of this test");
         }
-        
+
         return await this.prisma.testStage.create({
             data: {
                 ...createTestStageDto,
             },
             include: {
                 options: true,
-                answer: true,
             },
         });
     }
@@ -59,7 +38,6 @@ export class TestStageService {
             include: {
                 test: true,
                 options: true,
-                answer: true,
             },
         });
     }
@@ -89,7 +67,6 @@ export class TestStageService {
             include: {
                 test: true,
                 options: true,
-                answer: true,
             },
         });
 
@@ -114,32 +91,17 @@ export class TestStageService {
             where: { testId },
             include: {
                 options: true,
-                answer: true,
             },
         });
     }
 
     async update(id: number, updateTestStageDto: UpdateTestStageDto) {
         try {
-            // Если обновляется answerId, проверяем, существует ли новый Option
-            if (updateTestStageDto.answerId) {
-                const option = await this.prisma.option.findUnique({
-                    where: { id: updateTestStageDto.answerId },
-                });
-
-                if (!option) {
-                    throw new NotFoundException(
-                        `Option with ID ${updateTestStageDto.answerId} not found`,
-                    );
-                }
-            }
-
             return await this.prisma.testStage.update({
                 where: { id },
                 data: updateTestStageDto,
                 include: {
                     options: true,
-                    answer: true,
                 },
             });
         } catch (error) {
@@ -147,7 +109,7 @@ export class TestStageService {
         }
     }
 
-    async remove(id: number) {
+    async remove(id: number, creatorId: number) {
         try {
             return await this.prisma.testStage.delete({
                 where: { id },

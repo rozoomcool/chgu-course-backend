@@ -2,7 +2,7 @@ import { Controller, Get, Patch, Body, UseInterceptors, UploadedFile, UseGuards,
 import { ProfileService } from './profile.service';
 import { ImageFileUploadInterceptor } from 'src/config/imageFileUpload.interceptor';
 import { ConfigService } from '@nestjs/config';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('profile')
 export class ProfileController {

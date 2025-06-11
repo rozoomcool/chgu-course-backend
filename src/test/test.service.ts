@@ -8,7 +8,7 @@ import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
 export class TestService {
     constructor(private prisma: PrismaService) { }
 
-    async create(createTestDto: CreateTestDto, creatorId: number) {
+    async addTestToLesson(createTestDto: CreateTestDto, creatorId: number) {
         if (createTestDto.lessonId) {
             // Check if lesson exists
             const lesson = await this.prisma.lesson.findUnique({
@@ -48,13 +48,12 @@ export class TestService {
         }
 
         return this.prisma.test.create({
-            data: createTestDto,
+            data: { ...createTestDto, ownerId: creatorId },
             include: {
                 testStages: {
                     include: {
                         options: true,
-                        answer: true
-                    }   
+                    }
                 }
             }
         });
@@ -67,7 +66,6 @@ export class TestService {
                 testStages: {
                     include: {
                         options: true,
-                        answer: true,
                     },
                 },
             },
@@ -101,7 +99,6 @@ export class TestService {
                 testStages: {
                     include: {
                         options: true,
-                        answer: true,
                     },
                 },
             },
@@ -122,7 +119,6 @@ export class TestService {
                 testStages: {
                     include: {
                         options: true,
-                        answer: true,
                     },
                 },
             },

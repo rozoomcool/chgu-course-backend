@@ -1,5 +1,5 @@
 // test.dto.ts
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { TestStageType } from 'generated/prisma';
 
 export class CreateTestDto {
@@ -37,9 +37,8 @@ export class UpdateTestStageDto {
   @IsString()
   question?: string;
 
-  @IsOptional()
-  @IsNumber()
-  answerId?: number;
+  @IsBoolean()
+  isCorrect: boolean;
 }
 
 export class CreateOptionDto {
@@ -50,6 +49,10 @@ export class CreateOptionDto {
   @IsNotEmpty()
   @IsNumber()
   testStageId: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isCorrect: boolean;
 }
 
 export class UpdateOptionDto {

@@ -16,7 +16,7 @@ import {
 import { LessonService } from './lesson.service';
 import { CreateLessonDto, UpdateLessonDto } from './dto/lesson.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'generated/prisma';
 
@@ -27,7 +27,7 @@ import { Role } from 'generated/prisma';
 export class LessonController {
   constructor(private readonly lessonService: LessonService) { }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(CustomJwtAuthGuard, RolesGuard)
   @Roles(Role.TEACHER, Role.ADMIN)
   @Post()
   create(@Body() createLessonDto: CreateLessonDto, @Request() req) {
@@ -55,7 +55,7 @@ export class LessonController {
     return this.lessonService.findOne(id);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(CustomJwtAuthGuard, RolesGuard)
   @Roles(Role.TEACHER, Role.ADMIN)
   @Put(':id')
   update(

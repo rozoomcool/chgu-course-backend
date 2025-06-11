@@ -2,9 +2,9 @@ import { Controller, Request, Get, Post, Body, Patch, Param, Delete, Query, UseG
 import { UserService } from './user.service';
 import { Prisma, User } from 'generated/prisma';
 import { ProfileService } from 'src/profile/profile.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(CustomJwtAuthGuard)
 @Controller({
   path: 'users',
   version: '1'
