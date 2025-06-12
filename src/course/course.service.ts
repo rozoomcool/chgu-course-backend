@@ -3,6 +3,7 @@ import { Course, CourseAdmision, CourseAdmissionState, Prisma } from 'generated/
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
+import { Option } from '../../generated/prisma/index';
 
 @Injectable()
 export class CourseService {
@@ -71,6 +72,35 @@ export class CourseService {
         return await this.prisma.courseAdmision.findMany({
             where: {
                 userId
+            },
+            include: {}
+        })
+    }
+
+    async getStudentAdmissionsWithCourses(userId: number) {
+        return await this.prisma.courseAdmision.findMany({
+            where: {
+                userId
+            },
+            include: {
+                course: {
+                    include: {
+                        lessons: {
+                            include: {
+                                attachments: true,
+                                test: {
+                                    include: {
+                                        testStages: {
+                                            include: {
+                                                options: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         })
     }
@@ -88,7 +118,7 @@ export class CourseService {
         }
     }
 
-    async changeAdmissionState(params: { courseId: number, userId: number, ownerId: number, admissionState: CourseAdmissionState}): Promise<CourseAdmision> {
+    async changeAdmissionState(params: { courseId: number, userId: number, ownerId: number, admissionState: CourseAdmissionState }): Promise<CourseAdmision> {
         try {
             const course = await this.prisma.course.findUnique({
                 where: {

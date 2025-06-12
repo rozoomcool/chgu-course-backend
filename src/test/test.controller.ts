@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { TestService } from './test.service';
 import { Prisma, Role } from '../../generated/prisma';
-import { CreateTestDto, UpdateTestDto } from './dto/test.dto';
+import { CreateTestDto, SubmitTestDto, UpdateTestDto } from './dto/test.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CustomJwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -46,6 +46,11 @@ export class TestController {
     @Get('lesson/:lessonId')
     findByLessonId(@Param('lessonId', ParseIntPipe) lessonId: number) {
         return this.testService.findByLessonId(lessonId);
+    }
+
+    @Post('submit')
+    async submitTest(@Body() submitDto: SubmitTestDto) {
+        return this.testService.evaluateTest(submitDto);
     }
 
     @Get(':id')

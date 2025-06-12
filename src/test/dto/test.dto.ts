@@ -60,3 +60,8 @@ export class UpdateOptionDto {
   @IsString()
   option?: string;
 }
+
+export interface SubmitTestDto {
+  testId: number;
+  answers: { testStageId: number; optionIds: number[] }[];
+}

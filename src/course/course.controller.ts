@@ -1,4 +1,4 @@
-import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors, ParseBoolPipe, Put } from '@nestjs/common';
+import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors, ParseBoolPipe, Put, Logger } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CourseAdmissionState, Prisma, Role } from 'generated/prisma';
 import { CreateCourseDto } from './dto/createCourse.dto';
@@ -12,9 +12,10 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 @Controller({ path: 'course', version: '1' })
 export class CourseController {
     constructor(
-        private readonly courseService: CourseService
+        private readonly courseService: CourseService,
     ) { }
-
+    private readonly logger = new Logger(CourseController.name, { timestamp: true });
+    
     @Post()
     @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
@@ -97,13 +98,14 @@ export class CourseController {
         return this.courseService.getAllAdmissionByCourse(courseId);
     }
 
-    @UseGuards(CustomJwtAuthGuard, RolesGuard)
-    @Roles(Role.STUDENT, Role.ADMIN)
-    @Get("user/admission")
+    @UseGuards(CustomJwtAuthGuard)
+    // @Roles(Role.STUDENT, Role.ADMIN)
+    @Get("user/admissions")
     getAllAdmissionsByUser(
         @Request() req
     ) {
-        return this.courseService.getAllAdmissionByUser(Number.parseInt(req.user.id));
+        this.logger.log("|||||")
+        return this.courseService.getStudentAdmissionsWithCourses(Number.parseInt(req.user.id));
     }
 
     @Get('all/teacher/:teacherId')
