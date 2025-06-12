@@ -16,7 +16,7 @@ import { RolesGuard } from './guards/roles.guard';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('SECRET_KEY'),
         signOptions: {
-            expiresIn: 360000,
+            expiresIn: '15m',
         },
       }),
       inject: [ConfigService],

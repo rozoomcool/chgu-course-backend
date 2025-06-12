@@ -79,10 +79,11 @@ export class CourseService {
             },
         });
 
+        
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
-
+        
         return course;
     }
 

@@ -7,6 +7,7 @@ export default () => ({
         // port: parseInt(process.env.DATABASE_PORT!, 10) || 5432
     },
     jwt: {
-        secretKey: process.env.SECRET_KEY!
+        secretKey: process.env.SECRET_KEY!,
+        refreshKey: process.env.REFRESH_KEY!
     }
 });

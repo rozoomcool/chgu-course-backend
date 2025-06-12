@@ -24,4 +24,13 @@ export class AuthController {
         }
     }
 
+    @Post("refresh")
+    async refresh(@Body() request: {refreshToken: string}) {
+        try {
+            return await this.authService.refresh(request.refreshToken);
+        } catch (e) {
+            throw new HttpException("bad credentials", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
