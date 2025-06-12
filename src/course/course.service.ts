@@ -1,5 +1,5 @@
-import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { Course, Prisma } from 'generated/prisma';
+import { BadRequestException, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { Course, CourseAdmision, CourseAdmissionState, Prisma } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
@@ -48,6 +48,87 @@ export class CourseService {
         });
     }
 
+    async getAllAdmissionByCourse(courseId: number) {
+        return await this.prisma.courseAdmision.findMany({
+            where: {
+                courseId
+            }
+        })
+    }
+
+    async getUserCourseAdmission(courseId: number, userId: number) {
+        return await this.prisma.courseAdmision.findUnique({
+            where: {
+                id: {
+                    courseId,
+                    userId
+                }
+            }
+        })
+    }
+
+    async getAllAdmissionByUser(userId: number) {
+        return await this.prisma.courseAdmision.findMany({
+            where: {
+                userId
+            }
+        })
+    }
+
+    async addAdmission(courseId: number, userId: number): Promise<CourseAdmision> {
+        try {
+            return await this.prisma.courseAdmision.create({
+                data: {
+                    courseId,
+                    userId
+                }
+            });
+        } catch (e) {
+            throw new BadRequestException(`Course with ID ${courseId} not found`);
+        }
+    }
+
+    async changeAdmissionState(params: { courseId: number, userId: number, ownerId: number, admissionState: CourseAdmissionState}): Promise<CourseAdmision> {
+        try {
+            const course = await this.prisma.course.findUnique({
+                where: {
+                    id: params.courseId
+                }
+            })
+            if (!course) {
+                throw new NotFoundException(`Course with ID ${params.courseId} not found`)
+            }
+            if (course.teacherId != params.ownerId) {
+                throw new NotAcceptableException(`User has not permission`)
+            }
+            return await this.prisma.courseAdmision.update({
+                where: {
+                    id: {
+                        userId: params.userId,
+                        courseId: params.courseId
+                    }
+                },
+                data: {
+                    admissionState: CourseAdmissionState.REJECTED
+                }
+            });
+        } catch (e) {
+            throw new BadRequestException(`Course with ID ${params.courseId} not found`);
+        }
+    }
+
+    async countCourseStudents(courseId: number): Promise<number> {
+        try {
+            return await this.prisma.courseAdmision.count({
+                where: {
+                    courseId,
+                }
+            });
+        } catch (e) {
+            throw new BadRequestException(`Course with ID ${courseId} not found`);
+        }
+    }
+
     async create(createCourseDto: CreateCourseDto, teacherId: number) {
         return this.prisma.course.create({
             data: {
@@ -69,21 +150,20 @@ export class CourseService {
         });
     }
 
-    async findOne(id: number, lessons: boolean, students: boolean, teacher: boolean) {
+    async findOne(id: number, lessons: boolean, teacher: boolean) {
         const course = await this.prisma.course.findUnique({
             where: { id },
             include: {
                 lessons,
-                teacher,
-                students
+                teacher
             },
         });
 
-        
+
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
-        
+
         return course;
     }
 

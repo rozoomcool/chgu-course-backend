@@ -9,16 +9,16 @@ datasource db {
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
-  password       String
-  role           Role
-  profile        Profile?
-  courses        Course[]
-  tests          Test[]
-  studentCourses Course[] @relation("CourseStudents")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
+  id               Int              @id @default(autoincrement())
+  email            String           @unique
+  password         String
+  role             Role
+  profile          Profile?
+  courses          Course[]
+  tests            Test[]
+  courseAdmissions CourseAdmision[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
 }
 
 model Profile {
@@ -33,17 +33,32 @@ model Profile {
 }
 
 model Course {
-  id          Int        @id @default(autoincrement())
-  title       String
-  description String
-  imageUrl    String?
-  lessons     Lesson[]
-  teacher     User       @relation(fields: [teacherId], references: [id])
-  teacherId   Int
-  students    User[]     @relation("CourseStudents")
-  complexity  Complexity @default(EASY)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt
+  id               Int              @id @default(autoincrement())
+  title            String
+  description      String
+  imageUrl         String?
+  lessons          Lesson[]
+  teacher          User             @relation(fields: [teacherId], references: [id])
+  teacherId        Int
+  courseAdmissions CourseAdmision[]
+  complexity       Complexity       @default(EASY)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt
+}
+
+model CourseAdmision {
+  admissionState CourseAdmissionState @default(ACCEPTED)
+  user           User                 @relation(fields: [userId], references: [id])
+  userId         Int
+  course         Course               @relation(fields: [courseId], references: [id])
+  courseId       Int
+
+  @@id(name: "id", fields: [userId, courseId])
+}
+
+enum CourseAdmissionState {
+  ACCEPTED
+  REJECTED
 }
 
 enum Complexity {

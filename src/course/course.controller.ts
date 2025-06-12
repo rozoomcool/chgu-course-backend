@@ -1,6 +1,6 @@
 import { Body, Request, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors, ParseBoolPipe, Put } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { Prisma, Role } from 'generated/prisma';
+import { CourseAdmissionState, Prisma, Role } from 'generated/prisma';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { UpdateCourseDto } from './dto/updateCourse.dto';
 import { ImageFileUploadInterceptor } from 'src/config/imageFileUpload.interceptor';
@@ -55,6 +55,57 @@ export class CourseController {
         });
     }
 
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.STUDENT, Role.ADMIN)
+    @Post(":courseId/admission")
+    addAdmission(
+        @Request() req,
+        @Param("courseId", ParseIntPipe) courseId: number
+    ) {
+        return this.courseService.addAdmission(courseId, Number.parseInt(req.user.id));
+    }
+
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    @Put(":courseId/admission/user/:userId")
+    changeAdmission(
+        @Request() req,
+        @Param("courseId", ParseIntPipe) courseId: number,
+        @Param("userId", ParseIntPipe) userId: number,
+        @Query("admissionState") admissionState: CourseAdmissionState
+    ) {
+        return this.courseService.changeAdmissionState({ courseId, userId, admissionState, ownerId: Number.parseInt(req.user.id) });
+    }
+
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.STUDENT, Role.ADMIN)
+    @Get(":courseId/admission/user/")
+    getMyAdmission(
+        @Request() req,
+        @Param("courseId", ParseIntPipe) courseId: number
+    ) {
+        return this.courseService.getUserCourseAdmission(courseId, Number.parseInt(req.user.id));
+    }
+
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    @Get(":courseId/admission")
+    getAllAdmissionsByCourse(
+        @Request() req,
+        @Param("courseId", ParseIntPipe) courseId: number,
+    ) {
+        return this.courseService.getAllAdmissionByCourse(courseId);
+    }
+
+    @UseGuards(CustomJwtAuthGuard, RolesGuard)
+    @Roles(Role.STUDENT, Role.ADMIN)
+    @Get("user/admission")
+    getAllAdmissionsByUser(
+        @Request() req
+    ) {
+        return this.courseService.getAllAdmissionByUser(Number.parseInt(req.user.id));
+    }
+
     @Get('all/teacher/:teacherId')
     findByTeacherId(
         @Param('teacherId', ParseIntPipe) teacherId: number,
@@ -79,9 +130,8 @@ export class CourseController {
     findOne(@Param('id', ParseIntPipe) id: number,
         @Query('teacher') teacher: boolean = false,
         @Query('lessons') lessons: boolean = false,
-        @Query('students') students: boolean = false,
     ) {
-        return this.courseService.findOne(id, lessons, students, teacher);
+        return this.courseService.findOne(id, lessons, teacher);
     }
 
     @Put(':id')

@@ -150,6 +150,12 @@ exports.Prisma.CourseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CourseAdmisionScalarFieldEnum = {
+  admissionState: 'admissionState',
+  userId: 'userId',
+  courseId: 'courseId'
+};
+
 exports.Prisma.LessonScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -217,6 +223,11 @@ exports.Complexity = exports.$Enums.Complexity = {
   HARD: 'HARD'
 };
 
+exports.CourseAdmissionState = exports.$Enums.CourseAdmissionState = {
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
 exports.LessonAttachmentType = exports.$Enums.LessonAttachmentType = {
   VIDEO: 'VIDEO',
   IMAGE: 'IMAGE',
@@ -233,6 +244,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   Profile: 'Profile',
   Course: 'Course',
+  CourseAdmision: 'CourseAdmision',
   Lesson: 'Lesson',
   LessonAttachment: 'LessonAttachment',
   Test: 'Test',
