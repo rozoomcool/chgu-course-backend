@@ -48,10 +48,11 @@ model Course {
 
 model CourseAdmision {
   admissionState CourseAdmissionState @default(ACCEPTED)
-  user           User                 @relation(fields: [userId], references: [id])
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         Int
-  course         Course               @relation(fields: [courseId], references: [id])
+  course         Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId       Int
+
   @@id(name: "id", fields: [userId, courseId])
 }
 
@@ -73,7 +74,7 @@ model Lesson {
   test        Test?
   attachments LessonAttachment[]
   courseId    Int
-  course      Course             @relation(fields: [courseId], references: [id])
+  course      Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @default(now()) @updatedAt
 }
@@ -82,7 +83,7 @@ model LessonAttachment {
   id             Int                  @id @default(autoincrement())
   url            String
   attachmentType LessonAttachmentType
-  lesson         Lesson               @relation(fields: [lessonId], references: [id])
+  lesson         Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   lessonId       Int                  @unique
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @default(now()) @updatedAt
@@ -97,7 +98,7 @@ enum LessonAttachmentType {
 
 model Test {
   id         Int         @id @default(autoincrement())
-  lesson     Lesson?     @relation(fields: [lessonId], references: [id])
+  lesson     Lesson?     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   lessonId   Int?        @unique
   testStages TestStage[]
   createdAt  DateTime    @default(now())
@@ -108,7 +109,7 @@ model Test {
 
 model TestStage {
   id       Int           @id @default(autoincrement())
-  test     Test          @relation(fields: [testId], references: [id])
+  test     Test          @relation(fields: [testId], references: [id], onDelete: Cascade)
   testId   Int
   type     TestStageType @default(OPTIONAL)
   options  Option[]
@@ -120,7 +121,7 @@ model Option {
   option      String
   isCorrect   Boolean
   testStageId Int
-  testStage   TestStage @relation(fields: [testStageId], references: [id])
+  testStage   TestStage @relation(fields: [testStageId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

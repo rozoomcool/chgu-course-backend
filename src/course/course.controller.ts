@@ -156,10 +156,11 @@ export class CourseController {
         return this.courseService.update(id, Number.parseInt(req.user.id), updateCourseDto);
     }
 
-    @Delete(':id')
+    @Delete('delete/:id')
     @UseGuards(CustomJwtAuthGuard, RolesGuard)
     @Roles(Role.TEACHER, Role.ADMIN)
     remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
+        this.logger.log("|||||||")
         return this.courseService.remove(id, Number.parseInt(req.user.id));
     }
 }

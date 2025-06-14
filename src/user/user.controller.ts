@@ -33,7 +33,8 @@ export class UserController {
     return this.usersService.findOne({ id });
   }
 
-  @Get()
+  @UseGuards(CustomJwtAuthGuard)
+  @Get("user/current")
   getCurrent(@Request() req) {
     return this.usersService.findOneWithProfile(Number.parseInt(req.user.id));
   }

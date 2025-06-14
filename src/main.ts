@@ -17,6 +17,10 @@ async function bootstrap() {
     jsonDocumentUrl: 'swagger/json',
   });
 
+  app.enableCors({
+    origin: "*"
+  })
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

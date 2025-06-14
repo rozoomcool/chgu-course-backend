@@ -246,10 +246,14 @@ export class CourseService {
             if (course.teacherId == userId) {
                 return await this.prisma.course.delete({
                     where: { id },
+                    include: {
+                        courseAdmissions: true
+                    }
                 });
             }
             throw new NotAcceptableException("You cant accept to this entity");
         } catch (error) {
+            throw error;
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
     }
